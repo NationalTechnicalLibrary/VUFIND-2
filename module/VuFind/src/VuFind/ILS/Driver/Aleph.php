@@ -41,6 +41,7 @@ use Zend\Log\LoggerInterface;
 use VuFindHttp\HttpServiceInterface;
 use DateTime;
 use VuFind\Exception\Date as DateException;
+require_once '/var/www/vufind/aleph_tab/AlephTables.php';
 
 /**
  * Aleph Translator Class
@@ -61,7 +62,9 @@ class AlephTranslator
     public function __construct($configArray)
     {
         $this->charset = $configArray['util']['charset'];
-        $this->table15 = $this->parsetable(
+        // DM - preklad regalu probiha v oddelenem souboru AlephTables.php prizpusobenemu NTK
+        /*
+	$this->table15 = $this->parsetable(
             $configArray['util']['tab15'],
             get_class($this) . "::tab15Callback"
         );
@@ -73,6 +76,7 @@ class AlephTranslator
             $configArray['util']['tab_sub_library'],
             get_class($this) . "::tabSubLibraryCallback"
         );
+    	*/
     }
 
     /**
@@ -83,31 +87,32 @@ class AlephTranslator
      *
      * @return string
      */
-    public function parsetable($file, $callback)
-    {
-        $result = array();
-        $file_handle = fopen($file, "r, ccs=UTF-8");
-        $rgxp = "";
-        while (!feof($file_handle) ) {
-            $line = fgets($file_handle);
-            $line = chop($line);
-            if (preg_match("/!!/", $line)) {
-                $line = chop($line);
-                $rgxp = AlephTranslator::regexp($line);
-            } if (preg_match("/!.*/", $line) || $rgxp == "" || $line == "") {
-            } else {
-                $line = str_pad($line, 80);
-                $matches = "";
-                if (preg_match($rgxp, $line, $matches)) {
-                    call_user_func_array(
-                        $callback, array($matches, &$result, $this->charset)
-                    );
-                }
-            }
-        }
-        fclose($file_handle);
-        return $result;
-    }
+    // DM - zakomentovano, nepouziva se
+//    public function parsetable($file, $callback)
+//    {
+//        $result = array();
+//        $file_handle = fopen($file, "r, ccs=UTF-8");
+//        $rgxp = "";
+//        while (!feof($file_handle) ) {
+//            $line = fgets($file_handle);
+//            $line = chop($line);
+//            if (preg_match("/!!/", $line)) {
+//                $line = chop($line);
+//                $rgxp = AlephTranslator::regexp($line);
+//            } if (preg_match("/!.*/", $line) || $rgxp == "" || $line == "") {
+//            } else {
+//                $line = str_pad($line, 80);
+//                $matches = "";
+//                if (preg_match($rgxp, $line, $matches)) {
+//                    call_user_func_array(
+//                        $callback, array($matches, &$result, $this->charset)
+//                    );
+//                }
+//            }
+//        }
+//        fclose($file_handle);
+//        return $result;
+//    }
 
     /**
      * Get a tab40 collection description
@@ -119,12 +124,16 @@ class AlephTranslator
      */
     public function tab40Translate($collection, $sublib)
     {
-        $findme = $collection . "|" . $sublib;
-        $desc = $this->table40[$findme];
-        if ($desc == null) {
-            $findme = $collection . "|";
-            $desc = $this->table40[$findme];
-        }
+        //$findme = $collection . "|" . $sublib;
+        //$desc = $this->table40[$findme];
+    
+        // DM - preklad umisteni probiha v oddelenem souboru AlephTables.php    
+        $desc = tab40_translate($collection, $sublib);
+	
+	//if ($desc == null) {
+        //	$findme = $collection . "|";
+	//      $desc = $this->table40[$findme];
+        //}
         return $desc;
     }
 
@@ -135,11 +144,13 @@ class AlephTranslator
      *
      * @return string
      */
+    // DM - zakomentovano, pouziva se fce ze souboru AlephTables.php podle NTK
+    /*
     public function tabSubLibraryTranslate($sl)
     {
         return $this->table_sub_library[$sl];
     }
-
+    */
     /**
      * Get a tab15 item status
      *
@@ -149,6 +160,8 @@ class AlephTranslator
      *
      * @return string
      */
+    // DM - zakomentovano, pouziva se fce ze souboru AlephTables.php podle NTK
+    /*
     public function tab15Translate($slc, $isc, $ipsc)
     {
         $tab15 = $this->tabSubLibraryTranslate($slc);
@@ -164,7 +177,7 @@ class AlephTranslator
         $result["sub_lib_desc"] = $tab15["desc"];
         return $result;
     }
-
+    */
     /**
      * tab15 callback (modify $tab15 by reference)
      *
@@ -174,6 +187,8 @@ class AlephTranslator
      *
      * @return void
      */
+    /*
+     *      * DM - zakomentovano, nepouziva se
     public static function tab15Callback($matches, &$tab15, $charset)
     {
         $lib = $matches[1];
@@ -192,6 +207,7 @@ class AlephTranslator
             "opac" => $matches[10]
         );
     }
+     */
 
     /**
      * tab40 callback (modify $tab40 by reference)
@@ -202,6 +218,8 @@ class AlephTranslator
      *
      * @return void
      */
+    /*
+     *      * DM - zakomentovano, nepouziva se
     public static function tab40Callback($matches, &$tab40, $charset)
     {
         $code = trim($matches[1]);
@@ -211,7 +229,7 @@ class AlephTranslator
         $key = $code . "|" . $sub;
         $tab40[trim($key)] = array( "desc" => $desc );
     }
-
+    */
     /**
      * sub-library callback (modify $tab_sub_library by reference)
      *
@@ -221,6 +239,9 @@ class AlephTranslator
      *
      * @return void
      */
+    /*
+	    *      * DM - zakomentovano, nepouziva se
+	    *
     public static function tabSubLibraryCallback($matches, &$tab_sub_library,
         $charset
     ) {
@@ -229,7 +250,7 @@ class AlephTranslator
         $tab = trim($matches[6]);
         $tab_sub_library[$sublib] = array( "desc" => $desc, "tab15" => $tab );
     }
-
+     */
     /**
      * Apply standard regular expression cleanup to a string.
      *
@@ -472,11 +493,12 @@ class Aleph extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
      */
     protected function doXRequest($op, $params, $auth=false)
     {
-        if (!$this->xserver_enabled) {
+        // DM - chceme XServer presto, ze je disabled - viz. config
+        /*if (!$this->xserver_enabled) {
             throw new \Exception(
                 'Call to doXRequest without X-Server configuration in Aleph.ini'
             );
-        }
+        }*/
         $url = "http://$this->host/X?op=$op";
         $url = $this->appendQueryString($url, $params);
         if ($auth) {
@@ -789,12 +811,18 @@ class Aleph extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
             // $ipsc:
             $item_process_status = (string) $item->{'z30-item-process-status-code'};
             $sub_library_code    = (string) $item->{'z30-sub-library-code'}; // $slc
-            $z30 = $item->z30;
+	    $z30 = $item->z30;
+	    //
+	    // DM - status jednotky + dilci knihovna
+	    //
             if ($this->translator) {
-                $item_status = $this->translator->tab15Translate(
-                    $sub_library_code, $item_status, $item_process_status
-                );
-            } else {
+            //    $item_status = $this->translator->tab15Translate(
+            //        $sub_library_code, $item_status, $item_process_status
+            //    );
+	    //
+            // DM - preklad ze souboru AlephTables.php funkci tab15_translate - upraveno podle NTK
+	    $item_status = tab15_translate($sub_library_code, $item_status, $item_process_status);
+	    } else {
                 $item_status = array(
                     'opac'         => 'Y',
                     'request'      => 'C',
@@ -806,16 +834,25 @@ class Aleph extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
                 continue;
             }
             $availability = false;
-            $reserve = ($item_status['request'] == 'C')?'N':'Y';
-            $collection = (string) $z30->{'z30-collection'};
-            $collection_desc = array('desc' => $collection);
+	    $reserve = ($item_status['request'] == 'C')?'N':'Y';
+	    //
+	    // DM - umisteni jednotky
+	    //
+	    // preklad ze souboru AlephTables.php funkci tab40_translate - upraveno podle NTK
+	    //
+            $collection = (string) $z30->{'z30-collection'}; // umisteni jednotky anglicky
+	    $collection_desc = array('desc' => $collection); // umisteni jednotky cesky
+	    $collection_code = (string) $item->{'z30-collection-code'};
             if ($this->translator) {
-                $collection_code = (string) $item->{'z30-collection-code'};
                 $collection_desc = $this->translator->tab40Translate(
                     $collection_code, $sub_library_code
                 );
-            }
-            $requested = false;
+	    }
+	    //
+	    // DM - preklad umisteni titulu - ve vysledcich vyhledavani
+	    // - presunuto do AjaxController.php
+	    // - posila se tam odsud collection_code
+	    $requested = false;
             $duedate = '';
             $addLink = false;
             $status = (string) $item->{'status'};
@@ -829,19 +866,28 @@ class Aleph extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
                 $hold_request = $item->xpath('info[@type="HoldRequest"]/@allowed');
                 $addLink = ($hold_request[0] == 'Y');
             }
-            $matches = array();
-            if (preg_match(
-                "/([0-9]*\\/[a-zA-Z]*\\/[0-9]*);([a-zA-Z ]*)/", $status, $matches
-            )) {
-                $duedate = $this->parseDate($matches[1]);
-                $requested = (trim($matches[2]) == "Requested");
-            } else if (preg_match(
-                "/([0-9]*\\/[a-zA-Z]*\\/[0-9]*)/", $status, $matches
-            )) {
-                $duedate = $this->parseDate($matches[1]);
-            } else {
-                $duedate = null;
+            // DM - zakomentovano podle mzk $reserve = 'N';
+            if ($item_status['request'] == 'Y' && $availability == false) {
+                $reserve = 'N'; // DM - zmeneno z Y na N podle mzk
             }
+
+            $matches = array();
+
+            /*DM - zmena regu.vyrazu v prvnich dvouch vetvich - pro parsovani data pujeceno do*/
+            /*DM - dalsi zmena - jeli On Shelf, tak neni treba zobrazovat - hodno by bylo zjistit vsechny mozny stavy z alephu*/
+           if (preg_match("/([0-9]*\/[0-9]*\/[0-9]*);([a-zA-Z ]*)/", $status, $matches)) {
+               $duedate = $this->parseDate($matches[1]);
+               $requested = (trim($matches[2]) == "Requested");
+           } else if (preg_match("/([0-9]*\/[0-9]*\/[0-9]*)/", $status, $matches)) {
+               $duedate = $this->parseDate($matches[1]);
+           } else if (preg_match("/^(\d+\/?){3}$/", $status, $matches)) {
+              $duedate = $this->parseDate($status);
+           } else if ($status == "On Shelf") {
+              $duedate = null;
+           } else {
+              $duedate = $status; /*DM - zmena z null na $status - ztracela se informace*/
+           }
+
             // process duedate
             if ($availability) {
                 if ($this->duedates) {
@@ -866,23 +912,23 @@ class Aleph extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
                 'id'                => $id,
                 'item_id'           => $item_id,
                 'availability'      => $availability,
-                'status'            => (string) $item_status['desc'],
-                'location'          => $sub_library_code,
-                'reserve'           => 'N',
+                'status'            => (string) $item_status['desc'], // status jednotky
+                'location'          => $collection_code,//$location, // umisteni titulu - ve vysledcich vyhledavani
+                //'reserve'           => 'N',
                 'callnumber'        => (string) $z30->{'z30-call-no'},
                 'duedate'           => (string) $duedate,
                 'number'            => (string) $z30->{'z30-inventory-number'},
                 'barcode'           => (string) $z30->{'z30-barcode'},
                 'description'       => (string) $z30->{'z30-description'},
                 'notes'             => ($note == null) ? null : array($note),
-                'is_holdable'       => true,
+                'is_holdable'       => ($reserve == 'N')?true:false,
                 'addLink'           => $addLink,
                 'holdtype'          => 'hold',
                 /* below are optional attributes*/
-                'collection'        => (string) $collection,
-                'collection_desc'   => (string) $collection_desc['desc'],
+                'collection'        => (string) $collection, // umisteni jednotky anglicky
+                'collection_desc'   => (string) $collection_desc['desc'], // umisteni jednoty cesky
                 'callnumber_second' => (string) $z30->{'z30-call-no-2'},
-                'sub_lib_desc'      => (string) $item_status['sub_lib_desc'],
+                'sub_lib_desc'      => (string) $item_status['sub_lib_desc'], // dilci kihovna
                 'no_of_loans'       => (string) $z30->{'$no_of_loans'},
                 'requested'         => (string) $requested
             );
@@ -935,7 +981,8 @@ class Aleph extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
             $z30 = $item->z30;
             $group = $item->xpath('@href');
             $group = substr(strrchr($group[0], "/"), 1);
-            //$renew = $item->xpath('@renew');
+            $renew = $item->xpath('@renew'); // DM -
+            $renew_info = $item->xpath('renew-info');//echo($renew_loan[0]);
             //$docno = (string) $z36->{'z36-doc-number'};
             //$itemseq = (string) $z36->{'z36-item-sequence'};
             //$seq = (string) $z36->{'z36-sequence'};
@@ -955,6 +1002,32 @@ class Aleph extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
             $author = (string) $z13->{'z13-author'};
             $isbn = (string) $z13->{'z13-isbn-issn'};
             $barcode = (string) $z30->{'z30-barcode'};
+            $no_renewal = $z36->{'z36-no-renewal'}; // DM - pocet provedenych prodlouzeni vypujcky (X/2)
+            $nothing_renew = null; // DM - priznak pro vcas nevracenou jednotku
+            date_default_timezone_set('UTC'); // DM - nastaveni casove zony
+            $today_date = date("Ymd"); // DM - aktualni dnesni datum
+            if ($due < $today_date){
+                $nothing_renew = 'yes';
+            }
+            $loan_date = $z36->{'z36-loan-date'}; // DM - datum vypujcky
+            $last_renew_date = $z36->{'z36-last-renew-date'}; // DM - datum posledniho prodlouzeni vypujcky
+            // DM - je-li vypujcka nebo prodlouzeni provedeno dnes - nastav priznak a nasledne vypis status - dnes jiz nejde prodlouzit
+            if (($loan_date == $today_date) || ($last_renew_date == $today_date)){
+                $dueStatus = 'due_today';
+            }else{
+                $dueStatus='';
+            }
+            $result_for_requested = $this->getHolding($this->barcodeToID($barcode)); // DM - pocet cekajicich ve fronte
+            $callnumber = $z30->{'z30-call-no'}; // DM - signatura pro identifikaci presne jednotky, u ktere zjistujeme pocet cekajicich ve fronte
+            if (empty($result_for_requested)){
+                $no_requested = 'Jednotka není zaindexována ve VuFindu.';
+            }else{
+                $i = 0;
+                while ($result_for_requested[$i]['callnumber'] != $callnumber && $i<sizeof($result_for_requested)){
+                        $i++;
+                }
+                $no_requested = $result_for_requested[$i]['requested']; // DM - pocet cekajicich ve fronte
+            }
             $transList[] = array(
                 //'type' => $type,
                 'id' => ($history)?null:$this->barcodeToID($barcode),
@@ -971,6 +1044,12 @@ class Aleph extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
                 //'delete' => $delete,
                 'renewable' => true,
                 //'create' => $this->parseDate($create)
+                'no_requested' => $no_requested, // DM - pocet cekajicich ve fronte
+                'nothing_renew' => $nothing_renew, // DM - priznak pro vcas nevracenou jednotku
+                'dueStatus' => $dueStatus, // DM - priznak pro vypujcku provedenou dnes
+                'no_renewal' => $no_renewal, // DM - predavani poctu moznych prodlouzeni - <0,2>
+                'renew' => $renew, // DM - lze vypujcku prodluzovat (obecne)? Y
+                'last_renew_date' => $this->parseDate($last_renew_date), // DM - datum posledniho prodlouzeni
             );
         }
         return $transList;
@@ -1085,6 +1164,7 @@ class Aleph extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
                     'isbn' => array($isbn),
                     'reqnum' => $reqnum,
                     'barcode' => $barcode,
+                    //'id' => (string) $z13->{'z13-doc-number'}, // DM - id se bere primo z xml od Alephu //$this->barcodeToID($barcode),
                     'id' => $this->barcodeToID($barcode),
                     'expire' => $this->parseDate($expire),
                     'holddate' => $holddate,
@@ -1190,7 +1270,8 @@ class Aleph extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
             $id = (string) $z13->{'z13-doc-number'};
             $barcode = (string) $z30->{'z30-barcode'};
             $checkout = (string) $z31->{'z31-date'};
-            $id = $this->barcodeToID($barcode);
+            // DM - zakomentovano, delalo neplechu pri testovaci pokute za nic
+            // $id = $this->barcodeToID($barcode);
             if ($transactiontype=="Debit") {
                 $mult=-100;
             } elseif ($transactiontype=="Credit") {
@@ -1333,19 +1414,21 @@ class Aleph extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
         );
         $address = $xml->xpath('//address-information');
         $address = $address[0];
-        $address1 = (string)$address->{'z304-address-1'};
-        $address2 = (string)$address->{'z304-address-2'};
-        $address3 = (string)$address->{'z304-address-3'};
-        $address4 = (string)$address->{'z304-address-4'};
-        $address5 = (string)$address->{'z304-address-5'};
+        $address1 = (string)$address->{'z304-address-1'}; // DM - Prijmeni Jmeno
+	$address2 = (string)$address->{'z304-address-2'}; // DM - Ulice c.p
+        $address3 = (string)$address->{'z304-address-3'}; // DM - PSC Mesto
+        $address4 = (string)$address->{'z304-address-4'}; // DM - Zeme
+        $address5 = (string)$address->{'z304-address-5'}; // DM - Ulice c.p
         $zip = (string)$address->{'z304-zip'};
         $phone = (string)$address->{'z304-telephone-1'};
         $email = (string)$address->{'z404-email-address'};
         $dateFrom = (string)$address->{'z304-date-from'};
         $dateTo = (string)$address->{'z304-date-to'};
-        if (strpos($address2, ",") === false) {
-            $recordList['lastname'] = $address2;
-            $recordList['firstname'] = "";
+        if (strpos($address1, ",") === false) {
+	// $recordList['lastname'] = $address1;
+	// $recordList['firstname'] = $address1;
+	    list($recordList['lastname'], $recordList['firstname'])
+		    = explode(" ", $address1);
         } else {
             list($recordList['lastname'], $recordList['firstname'])
                 = explode(",", $address2);
@@ -1455,7 +1538,13 @@ class Aleph extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
                 $locations[$code] = $loc_name;
             }
         } else {
-            throw new ILSException('No pickup locations');
+            //throw new ILSException('No pickup locations');
+            // DM - kdyz neni pickup location - nelze rezervovat - hlaska (nutno zobrazit v sablone)
+            $fault = $xml->xpath('//note');
+            $fault_info = (string) $fault[0];
+            return array(
+                'fault_info' => $fault_info
+            );
         }
         $requests = 0;
         $str = $xml->xpath('//item/queue/text()');
@@ -1582,9 +1671,10 @@ class Aleph extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
      */
     public function barcodeToID($bar)
     {
-        if (!$this->xserver_enabled) {
+        // DM - chceme XServer presto, ze je disabled - viz. config
+        /*if (!$this->xserver_enabled) {
             return null;
-        }
+        }*/
         foreach ($this->bib as $base) {
             try {
                 $xml = $this->doXRequest(
@@ -1616,7 +1706,7 @@ class Aleph extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
      * @param string $date Date to parse
      *
      * @return string
-     */
+
     public function parseDate($date)
     {
         if ($date == null || $date == "") {
@@ -1633,6 +1723,30 @@ class Aleph extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
             throw new \Exception("Invalid date: $date");
         }
     }
+     */
+    // DM - funkce z puvodniho VuFindu 1.X
+    // - upravena na podminky NTK - Aleph posila ojedinely format datumu
+    function parseDate($date) {
+       if (preg_match("/^[0-9]{8}$/", $date) === 1) {
+           return substr($date, 6, 2) . "." .substr($date, 4, 2) . "." . substr($date, 0, 4);
+        } else {
+           list($day, $month, $year) = split("/", $date, 3);
+           if (!is_numeric($month)) {
+             $translate_month = array ( 'jan' => 1, 'feb' => 2, 'mar' => 3, 'apr' => 4, 'may' => 5, 'jun' => 6,
+                'jul' => 7, 'aug' => 8, 'sep' => 9, 'oct' => 10, 'nov' => 11, 'dec' => 12);
+             $month = $translate_month[strtolower($month)];
+           }
+           $day = ltrim($day, "0");
+           $month = ltrim($month, "0");
+
+           //MJ. aleph nekde pouziva jen 2 znaky pro oznaceni roku.. hack bude zrejme fungovat do roku 2100, pokud se vyznamne neprodlouzi vypujcni lhuty
+           if ($year < 100) {
+               $year = "20". $year;
+           }
+           return $day . "." . $month . "." . $year;
+        }
+    }
+
 
     /**
      * Public Function which retrieves renew, hold and cancel settings from the
@@ -1682,10 +1796,15 @@ class Aleph extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
                 $patron['id'], $holdInfo['id'], $holdInfo['item_id']
             );
             $pickupLocations = array();
-            foreach ($details['pickup-locations'] as $key => $value) {
-                $pickupLocations[] = array(
-                    "locationID" => $key, "locationDisplay" => $value
-                );
+            // DM - pickup-locations vracene v $details jsou prazdne - poslano info
+            if (!empty($details['fault_info'])){
+                return $details['fault_info'];
+            }else {
+                foreach ($details['pickup-locations'] as $key => $value) {
+                    $pickupLocations[] = array(
+                        "locationID" => $key, "locationDisplay" => $value
+                    );
+                }
             }
             return $pickupLocations;
         } else {

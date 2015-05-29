@@ -1157,6 +1157,9 @@ class SolrDefault extends AbstractBase
         if ($upc = $this->getCleanUPC()) {
             $arr['upc'] = $upc;
         }
+        if ($uid = $this->getUniqueID()) {
+            $arr['uid'] = $uid;
+        }
         // If an ILS driver has injected extra details, check for IDs in there
         // to fill gaps:
         if ($ilsDetails = $this->getExtraDetail('ils_details')) {

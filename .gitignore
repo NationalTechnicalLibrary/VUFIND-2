@@ -6,3 +6,9 @@ ChangeLog
 TAGS
 *~
 vendor/.git
+
+/local/harvest/
+/solr/biblio/spell*
+/solr/biblio/tlog/
+/solr/**/index/
+/solr/alphabetical_browse/

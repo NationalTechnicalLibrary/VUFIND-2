@@ -2,7 +2,7 @@
 <schema name="VuFind Bibliographic Index" version="1.2">
   <types>
     <!-- Define fieldType long as it is needed by the _version_ field required by Solr 4.x -->
-    <fieldType name="long" class="solr.TrieLongField" precisionStep="0" positionIncrementGap="0"/>
+    <fieldType name="long" class="solr.TrieLongField" precisionStep="0" positionIncrementGap="0"/>	  
     <fieldType name="string" class="solr.StrField" sortMissingLast="true" omitNorms="true"/>
     <fieldType name="textFacet" class="solr.TextField" sortMissingLast="true" omitNorms="true">
       <analyzer>
@@ -15,7 +15,7 @@
       <analyzer>
         <tokenizer class="solr.KeywordTokenizerFactory"/>
         <!-- this is just like textFacet but without punctuation stripping. -->
-      </analyzer>
+        </analyzer>
     </fieldType>
     <fieldType name="text" class="solr.TextField" positionIncrementGap="100">
       <analyzer type="index">
@@ -94,6 +94,13 @@
       </analyzer>
     </fieldType>
     <fieldType name="date" class="solr.TrieDateField" sortMissingLast="true" omitNorms="true" precisionStep="6"/>
+    <!-- DM - pridan patch 657 - normalizace LCC signatur k pouziti vyhledavani v rozsahu signatur -->
+    <!--fieldType name="LCNormalized" class="solr.TextField" sortMissingLast="true" omitNorms="true">
+      <analyzer>
+        <tokenizer class="solr.KeywordTokenizerFactory"/>
+        <filter class="org.vufind.solr.analysis.LCCNormalizeFilterFactory"/>
+      </analyzer>
+    </fieldType-->
     <fieldType name="random" class="solr.RandomSortField" indexed="true" />
     <fieldType name="boolean" class="solr.BoolField" sortMissingLast="true" omitNorms="true"/>
   </types>
@@ -143,6 +150,9 @@
    <field name="ctrlnum" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="isbn" type="isn" indexed="true" stored="true" multiValued="true"/>
    <field name="issn" type="isn" indexed="true" stored="true" multiValued="true"/>
+   <field name="article_resource_title" type="string" indexed="true" stored="true" multiValued="true"/>
+   <field name="article_issn" type="isn" indexed="true" stored="true" multiValued="true"/>
+   <field name="article_resource_related" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="oclc_num" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="callnumber" type="string" indexed="true" stored="true"/>
    <field name="callnumber-a" type="string" indexed="true" stored="true"/>
@@ -151,13 +161,14 @@
    <field name="callnumber-subject" type="string" indexed="true" stored="true"/>
    <field name="callnumber-subject-code" type="string" indexed="true" stored="true"/>
    <field name="callnumber-label" type="string" indexed="true" stored="true"/>
+   <field name="signature-old" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="dewey-hundreds" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="dewey-tens" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="dewey-ones" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="dewey-full" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="dewey-sort" type="string" indexed="true" stored="true" />
    <field name="dewey-sort-browse" type="string" indexed="true" stored="true" multiValued="true" />
-   <field name="dewey-raw" type="string" indexed="true" stored="true" multiValued="true" />
+   <field name="dewey-raw" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="author2" type="textProper" indexed="true" stored="true" multiValued="true"/>
    <field name="author2Str" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="author2-role" type="string" indexed="true" stored="true" multiValued="true"/>
@@ -173,6 +184,8 @@
    <field name="topic" type="text" indexed="true" stored="true" multiValued="true"/>
    <field name="topic_unstemmed" type="textProper" indexed="true" stored="false" multiValued="true"/>
    <field name="topic_facet" type="textFacet" indexed="true" stored="true" multiValued="true"/>
+   <field name="psh_facet"   type="textFacet" indexed="true" stored="true" multiValued="true"/>
+   <field name="digitized_facet"   type="textFacet" indexed="true" stored="true" multiValued="true"/>
    <field name="topic_browse" type="string" indexed="true" stored="false" multiValued="true"/>
    <field name="author_browse" type="string" indexed="true" stored="false" multiValued="true"/>
    <field name="genre" type="text" indexed="true" stored="true" multiValued="true"/>
@@ -183,6 +196,7 @@
    <field name="era_facet" type="textFacet" indexed="true" stored="true" multiValued="true"/>
    <field name="illustrated" type="string" indexed="true" stored="true" multiValued="false"/>
    <field name="long_lat" type="textFacet" indexed="true" stored="true" multiValued="false"/>
+   <!-- field name="callnumber-normalized" type="LCNormalized" indexed="true" stored="false" / -->
    <!-- Container fields (i.e. for describing journal containing an article) -->
    <field name="container_title" type="text" indexed="true" stored="true"/>
    <field name="container_volume" type="text" indexed="true" stored="true"/>

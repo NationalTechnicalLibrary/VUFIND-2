@@ -114,6 +114,13 @@ class Loader implements \Zend\Log\LoggerAwareInterface
     protected $upc = null;
 
     /**
+     * UniqueID NTK
+     *
+     * @var string
+     */
+    protected $uid = null;
+
+    /**
      * User size parameter
      *
      * @var string
@@ -257,7 +264,7 @@ class Loader implements \Zend\Log\LoggerAwareInterface
      */
     public function loadImage($isbn = null, $size = 'small', $type = null,
         $title = null, $author = null, $callnumber = null, $issn = null,
-        $oclc = null, $upc = null
+        $oclc = null, $upc = null, $uid = null
     ) {
         // Sanitize parameters:
         $this->isbn = new ISBN($isbn);
@@ -266,6 +273,7 @@ class Loader implements \Zend\Log\LoggerAwareInterface
             : substr(preg_replace('/[^0-9X]/', '', strtoupper($issn)), 0, 8);
         $this->oclc = $oclc;
         $this->upc = $upc;
+        $this->uid = $uid;error_log('uid je: ' . $uid . 'vis?');error_log('uid je: ' . $uid . 'vis?');
         $this->type = preg_replace("/[^a-zA-Z]/", "", $type);
         $this->size = $size;
 
@@ -300,7 +308,9 @@ class Loader implements \Zend\Log\LoggerAwareInterface
         // We should check whether we have cached images for the 13- or 10-digit
         // ISBNs. If no file exists, we'll favor the 10-digit number if
         // available for the sake of brevity.
-        if (isset($ids['isbn'])) {
+        if (isset($ids['uid'])){
+            return $this->getCachePath($this->size, $ids['uid']);
+        } else if (isset($ids['isbn'])) {
             $file = $this->getCachePath($this->size, $ids['isbn']->get13());
             if (!is_readable($file) && $ids['isbn']->get10()) {
                 return $this->getCachePath($this->size, $ids['isbn']->get10());
@@ -336,6 +346,9 @@ class Loader implements \Zend\Log\LoggerAwareInterface
         if ($this->upc && strlen($this->upc) > 0) {
             $ids['upc'] = $this->upc;
         }
+        if ($this->uid && strlen($this->uid) > 0) {
+            $ids['uid'] = $this->uid;
+        }
         return $ids;
     }
 
@@ -345,7 +358,7 @@ class Loader implements \Zend\Log\LoggerAwareInterface
      * @return bool        True if image loaded, false on failure.
      */
     protected function fetchFromAPI()
-    {
+    {error_log('kurde');
         // Check that we have at least one valid identifier:
         $ids = $this->getIdentifiers();
         if (empty($ids)) {
@@ -354,7 +367,7 @@ class Loader implements \Zend\Log\LoggerAwareInterface
 
         // Set up local file path:
         $this->localFile = $this->determineLocalFile($ids);
-        if (is_readable($this->localFile)) {
+        if (is_readable($this->localFile)) {error_log('Cachovano');
             // Load local cache if available
             $this->contentType = 'image/jpeg';
             $this->image = file_get_contents($this->localFile);
@@ -367,7 +380,7 @@ class Loader implements \Zend\Log\LoggerAwareInterface
                 $key = isset($provider[1]) ? trim($provider[1]) : null;
                 try {
                     $handler = $this->apiManager->get($apiName);
-
+                    error_log('zpracovava se');
                     // Is the current provider appropriate for the available data?
                     if ($handler->supports($ids)) {
                         if ($url = $handler->getUrl($key, $this->size, $ids)) {
@@ -600,7 +613,7 @@ class Loader implements \Zend\Log\LoggerAwareInterface
     {
         // If caching is allowed at the source level, let's see if it's locally
         // configured....
-        if ($allowCache) {
+        if ($allowCache) {error_log('allow cache');
             // All other services cache based on configuration:
             $conf = isset($this->config->Content->coverimagesCache)
                 ? trim(strtolower($this->config->Content->coverimagesCache)) : true;
@@ -615,7 +628,7 @@ class Loader implements \Zend\Log\LoggerAwareInterface
                 $source = strtolower($source);
                 $cache = in_array($source, $conf);
             }
-        } else {
+        } else {error_log('NEcache');
             $cache = false;
         }
         return $this->processImageURL($url, $cache);
@@ -645,7 +658,7 @@ class Loader implements \Zend\Log\LoggerAwareInterface
         // $cache is true or for temporary display purposes if $cache is false.
         $tempFile = str_replace('.jpg', uniqid(), $this->localFile);
         $finalFile = $cache ? $this->localFile : $tempFile . '.jpg';
-
+error_log('OBRAZEK');
         // Write image data to disk:
         if (!@file_put_contents($tempFile, $image)) {
             throw new \Exception("Unable to write to image directory.");

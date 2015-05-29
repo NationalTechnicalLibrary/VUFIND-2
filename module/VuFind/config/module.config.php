@@ -276,6 +276,7 @@ $config = array(
                 'invokables' => array(
                     'google' => 'VuFind\Content\Covers\Google',
                     'librarything' => 'VuFind\Content\Covers\LibraryThing',
+                    'alephimagecovers' => 'VuFind\Content\Covers\AlephImageCovers',
                     'openlibrary' => 'VuFind\Content\Covers\OpenLibrary',
                     'summon' => 'VuFind\Content\Covers\Summon',
                 ),

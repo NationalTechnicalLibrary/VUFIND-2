@@ -87,7 +87,8 @@ class CoverController extends AbstractBase
             $this->params()->fromQuery('callnumber'),
             $this->params()->fromQuery('issn'),
             $this->params()->fromQuery('oclc'),
-            $this->params()->fromQuery('upc')
+            $this->params()->fromQuery('upc'),
+            $this->params()->fromQuery('uid')
         );
         return $this->displayImage();
     }
