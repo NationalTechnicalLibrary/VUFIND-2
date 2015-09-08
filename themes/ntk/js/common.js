@@ -75,10 +75,12 @@ function deparam(url) {
 function moreFacets(id) {
   $('.'+id).removeClass('hidden');
   $('#more-'+id).addClass('hidden');
+  $('#less').removeClass('hidden');
 }
 function lessFacets(id) {
   $('.'+id).addClass('hidden');
   $('#more-'+id).removeClass('hidden');
+  $('#less').addClass('hidden');
 }
 
 // Advanced facets

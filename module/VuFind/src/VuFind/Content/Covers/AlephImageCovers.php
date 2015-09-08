@@ -65,7 +65,7 @@ class AlephImageCovers extends \VuFind\Content\AbstractCover
             return false;
         }
         $url = 'http://aleph.techlib.cz/cgi-bin/image.pl?size=big&sn='. $ids['uid'];
-        error_log($url);
+
         return $url;
     }
 }

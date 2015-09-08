@@ -699,7 +699,7 @@ class SolrMarc extends SolrDefault
 
         // Which fields/subfields should we check for URLs?
         $fieldsToCheck = array(
-            '856' => array('y', 'z'),   // Standard URL
+            '856' => array('y', 'z', '3'),   // Standard URL
             '555' => array('a')         // Cumulative index/finding aids
         );
 
@@ -1134,5 +1134,15 @@ class SolrMarc extends SolrDefault
         return XSLTProcessor::process(
             'record-rdf-mods.xsl', trim($this->marcRecord->toXML())
         );
+    }
+
+    // Informace o prejiti tistene formy casopisu do elektronicke podoby.
+    public function infoText()
+    {
+        $eiz_info = $this->marcRecord->getFields('530');
+        foreach ($eiz_info as $info_eiz) {
+                $info_text = $info_eiz->getSubfield('a'); // Marc pole 530a
+        }
+        return $info_text->getData();
     }
 }

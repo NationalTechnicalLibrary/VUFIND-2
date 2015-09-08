@@ -144,7 +144,7 @@ class RecordLink extends \Zend\View\Helper\AbstractHelper
      *
      * @return string
      */
-    public function getRequestUrl($url, $includeAnchor = true)
+    public function getRequestUrl($url, $param = null, $includeAnchor = true)
     {
         if (is_array($url)) {
             // Assemble URL string from array parts:
@@ -167,7 +167,7 @@ class RecordLink extends \Zend\View\Helper\AbstractHelper
         }
         // Make sure everything is properly HTML encoded:
         $escaper = $this->getView()->plugin('escapehtml');
-        return $escaper($finalUrl);
+        return $escaper($finalUrl.$param);
     }
 
     /**

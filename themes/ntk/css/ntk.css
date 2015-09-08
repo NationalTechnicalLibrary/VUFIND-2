@@ -1,0 +1,24 @@
+span.blue-status{
+    color: #01a3b8;
+}
+
+span.available-status {
+    color: #6ad500;
+    font-weight: 600;
+}
+
+.alert-info {
+    color: #3a87ad;
+    background-color: #ededed;
+    border-color: #ededed;
+}
+
+.author_title {
+    margin-left: 20px;
+}
+
+#loading{
+    content:url("../images/ajax_loader.gif");
+    width: 200px;
+    z-index: 1000;
+}

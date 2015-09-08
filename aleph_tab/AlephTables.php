@@ -14228,195 +14228,243 @@ array (
  '101|' =>
   array (
     'desc' => '101 ÚACH',
+    'tooltip' => 'Ústav anorganické chemie',
   ),
  '105|' =>
   array (
     'desc' => '105 ÚAT',
+    'tooltip' =>'',
   ),
  '106|' =>
   array (
     'desc' => '106 ÚKMKI',
+    'tooltip' =>'',
   ),
  '107|' =>
   array (
     'desc' => '105 ÚSK',
+      'tooltip' =>'',
   ),
  '108|' =>
   array (
     'desc' => '108 ÚCHPL',
+      'tooltip' =>'',
   ),
  '110|' =>
   array (
     'desc' => '110 ÚOCH',
+      'tooltip' =>'',
   ),
  '111|' =>
   array (
     'desc' => '111 ÚOT',
+      'tooltip' =>'',
   ),
  '112|' =>
   array (
     'desc' => '112 ÚP',
+      'tooltip' =>'',
   ),
  '126|' =>
   array (
     'desc' => '126 ÚIPL',
+      'tooltip' =>'',
   ),
  '141|' =>
   array (
     'desc' => '141 LAM',
+      'tooltip' =>'',
   ),
  '143|' =>
   array (
     'desc' => '143 LICH',
+      'tooltip' =>'',
   ),
  '148|' =>
   array (
     'desc' => '148 ÚCHTRP',
+      'tooltip' =>'',
   ),
   '215|' =>
   array (
     'desc' => '216 ÚTRAP',
+      'tooltip' =>'',
   ),
  '216|' =>
   array (
     'desc' => '216 ÚPKOO',
+      'tooltip' =>'',
   ),
  '217|' =>
   array (
     'desc' => '217 ÚTVP',
+      'tooltip' =>'',
   ),
  '218|' =>
   array (
     'desc' => '218 ÚE',
+      'tooltip' =>'',
   ),
  '240|' =>
   array (
     'desc' => '240 ÚCHOP',
+      'tooltip' =>'',
   ),
  '319|' =>
   array (
     'desc' => '319 ÚB',
+      'tooltip' =>'',
   ),
  '320|' =>
   array (
     'desc' => '320 ÚBM',
+      'tooltip' =>'',
   ),
  '321|' =>
   array (
     'desc' => '321 ÚSC',
+      'tooltip' =>'',
   ),
  '322|' =>
   array (
     'desc' => '322 ÚMTK',
+      'tooltip' =>'',
   ),
  '323|' =>
   array (
     'desc' => '323 ÚAPV',
+      'tooltip' =>'',
   ),
  '324|' =>
   array (
     'desc' => '324 ÚKP',
+      'tooltip' =>'',
   ),
  '325|' =>
   array (
     'desc' => '325 SVCT',
+      'tooltip' =>'',
   ),
  '342|' =>
   array (
     'desc' => '342 ÚCHPL',
+      'tooltip' =>'',
   ),
  '402|' =>
   array (
     'desc' => '402 ÚAnCH',
+      'tooltip' =>'',
   ),
  '403|' =>
   array (
     'desc' => '403 ÚFCH',
+      'tooltip' =>'',
   ),
  '409|' =>
   array (
     'desc' => '409 ÚCHI',
+      'tooltip' =>'Ústav chemického inženýrství',
   ),
  '413|' =>
   array (
     'desc' => '413 ÚM',
+      'tooltip' =>'',
   ),
  '437|' =>
   array (
     'desc' => '437 ÚEMCHPP',
+      'tooltip' =>'',
   ),
  '444|' =>
   array (
     'desc' => '444 ÚFMT',
+      'tooltip' =>'',
   ),
  '445|' =>
   array (
     'desc' => '445 ÚPRT',
+      'tooltip' =>'',
   ),
   '832|' =>
   array (
     'desc' => '832 KSV',
+      'tooltip' =>'',
   ),
  '834|' =>
   array (
     'desc' => '834 KJ',
+      'tooltip' =>'',
   ),
  '980|' =>
   array (
     'desc' => '980 CL',
+      'tooltip' =>'',
   ),
  '990|' =>
   array (
     'desc' => '990 VC',
+      'tooltip' =>'',
   ),
  '999|' =>
   array (
     'desc' => '999 Vyd',
+      'tooltip' =>'',
   ),
  '979|' =>
   array (
     'desc' => '979 OK',
+      'tooltip' =>'',
   ),
 // DM - 12/2013 - pridano nekolik novych ustavu vscht
  '997|' =>
   array (
     'desc' => '997 CIS',
+      'tooltip' =>'',
   ),
  '966|' =>
   array (
     'desc' => '966 PO',
+      'tooltip' =>'',
   ),
  '971|' =>
   array (
     'desc' => '971 EO',
+      'tooltip' =>'',
   ),
  '972|' =>
   array (
     'desc' => '972 OVZ',
+      'tooltip' =>'',
   ),
  '962|' =>
   array (
     'desc' => '962 KV',
+    'tooltip' =>'',
   ),
  '938|' =>
   array (
     'desc' => '938 UIA',
+      'tooltip' =>'',
   ),
  '352|' =>
   array (
     'desc' => '352 DFPBT',
+      'tooltip' =>'',
   ),
  '961|' =>
   array (
     'desc' => '961 SR',
+    'tooltip' => '961 SR',
   ),
  '995|' =>
   array (
     'desc' => '995 OPS',
+    'tooltip' => '995 OPS',
   ),
  '939|' =>
   array (
     'desc' => '939 RK',
+    'tooltip' => '939 RK',
   ),
 );
    
@@ -14517,7 +14565,7 @@ function tab15_translate($slc, $isc, $ipsc) {
   array (
     'desc' => 'Objednáno',
     'loan' => 'N',
-    'request' => 'N',
+    'request' => 'Y',
     'opac' => 'Y',
   ),
   '15A||CL' => 
@@ -14575,6 +14623,7 @@ function tab15_translate($slc, $isc, $ipsc) {
     'loan' => 'N',
     'request' => 'N',
     'opac' => 'Y',
+    'tooltip' => 'Exemplář je dlouhodobě nedostupný. (Kniha je pravděpodobně ztracena a není možné si ji půjčit.)',
   ),
   '15A||SV' => 
   array (
@@ -14624,6 +14673,7 @@ function tab15_translate($slc, $isc, $ipsc) {
     'loan' => 'N',
     'request' => 'Y',
     'opac' => 'Y',
+    'tooltip' => 'Exemplář se nachází ve volném výběru a je určen pouze ke studiu v prostorách NTK.',
   ),
   '15A|02|' => 
   array (
@@ -14631,6 +14681,7 @@ function tab15_translate($slc, $isc, $ipsc) {
     'loan' => 'N',
     'request' => 'Y',
     'opac' => 'Y',
+    'tooltip' => 'Exemplář se nachází ve volném výběru a je určen pouze ke studiu v prostorách NTK.',
   ),
   '15A|03|' => 
   array (
@@ -14638,6 +14689,7 @@ function tab15_translate($slc, $isc, $ipsc) {
     'loan' => 'Y',
     'request' => 'Y',
     'opac' => 'Y',
+    'tooltip' => 'Exemplář se nachází ve volném výběru a je možné si ho půjčit na 28 dní domů.',
   ),
   '15A|04|' => 
   array (
@@ -14645,6 +14697,7 @@ function tab15_translate($slc, $isc, $ipsc) {
     'loan' => 'Y',
     'request' => 'Y',
     'opac' => 'Y',
+    'tooltip' => 'Exemplář se nachází ve volném výběru a je možné si ho půjčit na 28 dní domů.',
   ),
   '15A|11|' => 
   array (
@@ -14652,6 +14705,7 @@ function tab15_translate($slc, $isc, $ipsc) {
     'loan' => 'Y',
     'request' => 'C',
     'opac' => 'Y',
+    'tooltip' => 'Exemplář je uložen ve skladu NTK a je určen pouze ke studiu ve Studovně časopisů ve 3. NP. Objednané exempláře jsou k dispozici ve Studovně časopisů po dobu 28 dní.',
   ),
   '15A|13|' => 
   array (
@@ -14659,6 +14713,7 @@ function tab15_translate($slc, $isc, $ipsc) {
     'loan' => 'Y',
     'request' => 'C',
     'opac' => 'Y',
+    'tooltip' => 'Exemplář je uložen ve skladu a je možné si ho půjčit na 28 dní domů. Objednané exempláře jsou připraveny k vyzvednutí u Centrálního pultu ve 2.NP.',
   ),
   '15A|14|' => 
   array (
@@ -14666,6 +14721,7 @@ function tab15_translate($slc, $isc, $ipsc) {
     'loan' => 'Y',
     'request' => 'C',
     'opac' => 'Y',
+    'tooltip' => 'Exemplář je uložen ve skladu a je možné si ho půjčit na 28 dní domů. Objednané exempláře jsou připraveny k vyzvednutí u Centrálního pultu ve 2.NP.',
   ),
   '15A|22|' =>
   array (
@@ -14673,6 +14729,7 @@ function tab15_translate($slc, $isc, $ipsc) {
     'loan' => 'N',
     'request' => 'N',
     'opac' => 'Y',
+    'tooltip' => 'Exemplář je umístěn v některém z ústavů VŠCHT. V případě zájmu kontaktujte pracovníka meziknihovních služeb VŠCHT telefonicky 232 002 571 nebo mailem mvs@vscht.cz.',
   ),
   '15A|24|' =>
   array (
@@ -14680,6 +14737,7 @@ function tab15_translate($slc, $isc, $ipsc) {
     'loan' => 'N',
     'request' => 'N',
     'opac' => 'Y',
+    'tooltip' => 'Exemplář je trvale zapůjčen pracovníkovi některého z ústavů VŠCHT (viz “Umístění”) a nelze jej vypůjčit běžným způsobem. V případě zájmu kontaktujte pracovníka meziknihovních služeb VŠCHT telefonicky 232 002 571 nebo mailem mvs@vscht.cz.',
   ),
   '15A|81|' => 
   array (
@@ -14687,6 +14745,7 @@ function tab15_translate($slc, $isc, $ipsc) {
     'loan' => 'Y',
     'request' => 'C',
     'opac' => 'Y',
+    'tooltip' => 'Exemplář patří mezi staré tisky (vydání před rokem 1800) a je určen pouze ke studiu v Badatelně Historického fondu. Jeho vypůjčení je možné přes tlačítko „Objednat“.',
   ),
   '15A|82|' => 
   array (
@@ -14694,6 +14753,7 @@ function tab15_translate($slc, $isc, $ipsc) {
     'loan' => 'Y',
     'request' => 'C',
     'opac' => 'Y',
+    'tooltip' => 'Exemplář patří mezi vzácné tisky (rok vydání 1801 – 1920) a je určen pouze ke studiu v Badatelně Historického fondu. Jeho vypůjčení je možné přes tlačítko „Objednat“.',
   ),
   '15A|83|' => 
   array (
@@ -14713,7 +14773,7 @@ function tab15_translate($slc, $isc, $ipsc) {
 //2013-07-17-new 2 statuses
   '15A|85|' =>
   array (
-    'desc' => 'On-line přístup (proxy)',
+    'desc' => 'Absenčně - 14 dní',
     'loan' => 'Y',
     'request' => 'C',
     'opac' => 'Y',

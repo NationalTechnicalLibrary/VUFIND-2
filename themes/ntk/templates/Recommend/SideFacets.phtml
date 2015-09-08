@@ -1,6 +1,6 @@
 <? $results = $this->recommend->getResults(); ?>
 <? if ($results->getResultTotal() > 0): ?>
-  <h4><?=$this->transEsc(isset($this->overrideSideFacetCaption) ? $this->overrideSideFacetCaption : 'Narrow Search')?></h4>
+  <h3 class="first"><?=$this->transEsc(isset($this->overrideSideFacetCaption) ? $this->overrideSideFacetCaption : 'Narrow Search')?></h3>
 <? endif; ?>
 <? $checkboxFilters = $results->getParams()->getCheckboxFacets(); if (count($checkboxFilters) > 0): ?>
 <?
@@ -23,8 +23,8 @@
 <? $extraFilters = isset($this->extraSideFacetFilters) ? $this->extraSideFacetFilters : array(); ?>
 <? $collapsedFacets = $this->recommend->getCollapsedFacets() ?>
 <? $filterList = array_merge($results->getParams()->getFilterList(true), $extraFilters); if (!empty($filterList)): ?>
-  <ul class="list-group filters">
-    <li class="list-group-item title"><?=$this->transEsc('Remove Filters')?></li>
+  <ul class="list-group filters list-group-sm">
+    <li class="list-group-item list-group-title"><?=$this->transEsc('Remove Filters')?></li>
     <? foreach ($filterList as $field => $filters): ?>
       <? foreach ($filters as $i => $filter): ?>
         <?
@@ -54,8 +54,8 @@
 <? if (!empty($sideFacetSet) && $results->getResultTotal() > 0): ?>
   <? foreach ($sideFacetSet as $title => $cluster): ?>
     <? $allowExclude = $this->recommend->excludeAllowed($title); ?>
-    <ul class="list-group" id="side-panel-<?=$this->escapeHtmlAttr($title) ?>">
-      <li class="list-group-item title<? if(in_array($title, $collapsedFacets)): ?> collapsed<? endif ?>" data-toggle="collapse" href="#side-collapse-<?=$this->escapeHtmlAttr($title) ?>">
+    <ul class="list-group list-group-sm" id="side-panel-<?=$this->escapeHtmlAttr($title) ?>">
+      <li class="list-group-item list-group-title<? if(in_array($title, $collapsedFacets)): ?> collapsed<? endif ?>" data-toggle="collapse" href="#side-collapse-<?=$this->escapeHtmlAttr($title) ?>">
         <?=$this->transEsc($cluster['label'])?>
       </li>
       <div id="side-collapse-<?=$this->escapeHtmlAttr($title) ?>" class="collapse<? if(!in_array($title, $collapsedFacets)): ?> in<? endif ?>">
@@ -82,7 +82,7 @@
               <? if ($rangeFacets[$title]['type'] == 'date'): ?>
                 <div class="slider-container"><input type="text" class="hidden" id="<?=$this->escapeHtmlAttr($title)?><?=$this->escapeHtml($rangeFacets[$title]['type'])?>Slider"/></div>
               <? endif; ?>
-              <input class="btn btn-default" type="submit" value="<?=$this->transEsc('Set')?>"/>
+              <input class="btn btn-sm btn-neutral" type="submit" value="<?=$this->transEsc('Set')?>"/>
             </form>
           </li>
           <? if ($rangeFacets[$title]['type'] == 'date'): ?>
@@ -145,7 +145,7 @@ JS;
             <span class="badge">
               <?=number_format($thisFacet['count'])?>
               <? if ($allowExclude): ?>
-                <a href="<?=$this->currentPath().$results->getUrlQuery()->addFacet($title, $thisFacet['value'], 'NOT') ?>" title="<?=$this->transEsc('exclude_facet') ?>"><i class="fa fa-times"></i></a>
+                <a class="badge-action glyphicon glyphicon-remove" href="<?=$this->currentPath().$results->getUrlQuery()->addFacet($title, $thisFacet['value'], 'NOT') ?>" title="<?=$this->transEsc('exclude_facet') ?>"></a>
               <? endif; ?>
             </span>
             <? if ($allowExclude): ?>
@@ -154,7 +154,7 @@ JS;
             <? if($thisFacet['operator'] == 'OR'): ?>
               <i class="fa fa-square-o"></i>
             <? endif; ?>
-            <?=$this->escapeHtml($thisFacet['displayText'])?>
+            <?=$this->transEsc($thisFacet['displayText'])?>
             <? if ($allowExclude): ?>
                 </a>
               </li>

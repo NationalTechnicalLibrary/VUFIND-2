@@ -923,6 +923,41 @@ class SolrDefault extends AbstractBase
     }
 
     /**
+     * EOD
+     */
+    public function isEOD()
+    {
+        // Get a representative publication date:
+        $pubDate = $this->getPublicationDates();
+        $pubDate = empty($pubDate) ? '' : $pubDate[0];
+
+        // Get format
+        $format=$this->getFormats();
+
+        // Get collection
+        $collection = $this->fields['collection'][0];
+
+        $topyear = date('Y')-100;
+
+        if (($pubDate < $topyear) && ($pubDate > 1500) && ($format[0] == 'Book') && ($collection == 'NTK')) {
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    /**
+     * source document
+     */
+    public function getSourceDoc()
+    {
+
+        $sourcedoc=array("title" => $this->fields['article_resource_title'], "issn" => $this->fields['article_issn'], "related" => $this->fields['article_resource_related']);
+        return $sourcedoc;
+
+    }
+
+    /**
      * Get human readable publication dates for display purposes (may not be suitable
      * for computer processing -- use getPublicationDates() for that).
      *

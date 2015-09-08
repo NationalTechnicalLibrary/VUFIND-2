@@ -61,22 +61,16 @@ class AlephTranslator
      */
     public function __construct($configArray)
     {
+        /* Globalni promenna pro priznak z pole 998a (zda se jedna o EIZ).
+         * Nastavi se podle jedne (prvni) jednotky, dalsi jednotky se
+         * neproveruji. Vychazi to z toho, ze pro kazdou jednotku je stejny
+         * jeden bibliograficky zaznam.
+         */
+        $eiz = null;
+
         $this->charset = $configArray['util']['charset'];
-        // DM - preklad regalu probiha v oddelenem souboru AlephTables.php prizpusobenemu NTK
-        /*
-	$this->table15 = $this->parsetable(
-            $configArray['util']['tab15'],
-            get_class($this) . "::tab15Callback"
-        );
-        $this->table40 = $this->parsetable(
-            $configArray['util']['tab40'],
-            get_class($this) . "::tab40Callback"
-        );
-        $this->table_sub_library = $this->parsetable(
-            $configArray['util']['tab_sub_library'],
-            get_class($this) . "::tabSubLibraryCallback"
-        );
-    	*/
+
+        /* Preklad regalu probiha v oddelenem souboru AlephTables.php prizpusobenemu NTK. */
     }
 
     /**
@@ -129,10 +123,10 @@ class AlephTranslator
     
         // DM - preklad umisteni probiha v oddelenem souboru AlephTables.php    
         $desc = tab40_translate($collection, $sublib);
-	
-	//if ($desc == null) {
-        //	$findme = $collection . "|";
-	//      $desc = $this->table40[$findme];
+        
+        //if ($desc == null) {
+        //        $findme = $collection . "|";
+        //      $desc = $this->table40[$findme];
         //}
         return $desc;
     }
@@ -240,8 +234,8 @@ class AlephTranslator
      * @return void
      */
     /*
-	    *      * DM - zakomentovano, nepouziva se
-	    *
+            *      * DM - zakomentovano, nepouziva se
+            *
     public static function tabSubLibraryCallback($matches, &$tab_sub_library,
         $charset
     ) {
@@ -593,9 +587,9 @@ class Aleph extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
         }
 
         $result = null;
-        try {
-            $client = $this->httpService->createClient($url);
-            $client->setMethod($method);
+        try { // DM - pridan parametr timeout=300
+            $client = $this->httpService->createClient($url, $method, '300');
+//            $client->setMethod($method);
             if ($body != null) {
                 $client->setRawBody($body);
             }
@@ -811,54 +805,56 @@ class Aleph extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
             // $ipsc:
             $item_process_status = (string) $item->{'z30-item-process-status-code'};
             $sub_library_code    = (string) $item->{'z30-sub-library-code'}; // $slc
-	    $z30 = $item->z30;
-	    //
-	    // DM - status jednotky + dilci knihovna
-	    //
-            if ($this->translator) {
-            //    $item_status = $this->translator->tab15Translate(
-            //        $sub_library_code, $item_status, $item_process_status
-            //    );
-	    //
+            $z30 = $item->z30;
+            //
+            // DM - status jednotky + dilci knihovna
+            //
+        if ($this->translator) {
+        //    $item_status = $this->translator->tab15Translate(
+        //        $sub_library_code, $item_status, $item_process_status
+        //    );
+            //
             // DM - preklad ze souboru AlephTables.php funkci tab15_translate - upraveno podle NTK
-	    $item_status = tab15_translate($sub_library_code, $item_status, $item_process_status);
-	    } else {
-                $item_status = array(
-                    'opac'         => 'Y',
-                    'request'      => 'C',
-                    'desc'         => (string) $z30->{'z30-item-status'},
-                    'sub_lib_desc' => (string) $z30->{'z30-sub-library'}
-                );
-            }
-            if ($item_status['opac'] != 'Y') {
-                continue;
-            }
-            $availability = false;
-	    $reserve = ($item_status['request'] == 'C')?'N':'Y';
-	    //
-	    // DM - umisteni jednotky
-	    //
-	    // preklad ze souboru AlephTables.php funkci tab40_translate - upraveno podle NTK
-	    //
+            $item_status = tab15_translate($sub_library_code, $item_status, $item_process_status);
+            } else {
+            $item_status = array(
+                'opac'         => 'Y',
+                'request'      => 'C',
+                'desc'         => (string) $z30->{'z30-item-status'},
+                'sub_lib_desc' => (string) $z30->{'z30-sub-library'}
+            );
+        }
+        if ($item_status['opac'] != 'Y') {
+            continue;
+        }
+        $availability = false;
+            $reserve = ($item_status['request'] == 'C')?'N':'Y';
+            //
+            // DM - umisteni jednotky
+            //
+            // preklad ze souboru AlephTables.php funkci tab40_translate - upraveno podle NTK
+            //
             $collection = (string) $z30->{'z30-collection'}; // umisteni jednotky anglicky
-	    $collection_desc = array('desc' => $collection); // umisteni jednotky cesky
-	    $collection_code = (string) $item->{'z30-collection-code'};
+            $collection_desc = array('desc' => $collection); // umisteni jednotky cesky
+            $collection_code = (string) $item->{'z30-collection-code'};
             if ($this->translator) {
                 $collection_desc = $this->translator->tab40Translate(
                     $collection_code, $sub_library_code
                 );
-	    }
-	    //
-	    // DM - preklad umisteni titulu - ve vysledcich vyhledavani
-	    // - presunuto do AjaxController.php
-	    // - posila se tam odsud collection_code
-	    $requested = false;
+            }
+            //
+            // DM - preklad umisteni titulu - ve vysledcich vyhledavani
+            // - presunuto do AjaxController.php
+            // - posila se tam odsud collection_code
+            $requested = false;
             $duedate = '';
             $addLink = false;
             $status = (string) $item->{'status'};
-            if (in_array($status, $this->available_statuses)) {
+
+            if ((in_array($status, $this->available_statuses)) && !($z30->{'z30-item-status'} == 'Permanently loaned')) {
                 $availability = true;
             }
+
             if ($item_status['request'] == 'Y' && $availability == false) {
                 $addLink = true;
             }
@@ -908,6 +904,21 @@ class Aleph extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
             $item_id = $item->attributes()->href;
             $item_id = substr($item_id, strrpos($item_id, '/') + 1);
             $note    = (string) $z30->{'z30-note-opac'};
+
+            // DM - prohledavani pole 998a pres XServer se deje pro prvni jednotku - jde o bib zaznam, ktery je pro vsechny jednotky stejny
+            if ($GLOBALS['eiz'] == null){
+               // DM - nacteni pole 998a
+               $parametrs = array('base' => 'STK01','doc_num' => $id);
+               $xml_eiz = $this->doXRequest('find-doc', $parametrs);
+               $is_eiz = $xml_eiz->xpath("//varfield[@id='998']/subfield[@label='a']");
+               $is_eiz_string = (string) $is_eiz[0];
+               if ($is_eiz_string == 'eiz'){
+                       $GLOBALS['eiz'] = 1;
+               }else{
+                       $GLOBALS['eiz'] = 2;
+               }
+            }
+
             $holding[] = array(
                 'id'                => $id,
                 'item_id'           => $item_id,
@@ -930,7 +941,10 @@ class Aleph extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
                 'callnumber_second' => (string) $z30->{'z30-call-no-2'},
                 'sub_lib_desc'      => (string) $item_status['sub_lib_desc'], // dilci kihovna
                 'no_of_loans'       => (string) $z30->{'$no_of_loans'},
-                'requested'         => (string) $requested
+                'requested'         => (string) $requested,
+                'tooltip'           => (string) $item_status['tooltip'],
+                'tooltip-vscht'     => (string) $collection_desc['tooltip'],
+                'eiz'               => $GLOBALS['eiz'],
             );
         }
         return $holding;
@@ -945,9 +959,9 @@ class Aleph extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
      * @throws ILSException
      * @return array      Array of the patron's transactions on success.
      */
-    public function getMyHistory($user)
+    public function getMyHistory($user, $limit = 0)
     {
-        return $this->getMyTransactions($user, true);
+        return $this->getMyTransactions($user, true, $limit);
     }
 
     /**
@@ -964,13 +978,16 @@ class Aleph extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
      * @throws ILSException
      * @return array        Array of the patron's transactions on success.
      */
-    public function getMyTransactions($user, $history=false)
+    public function getMyTransactions($user, $history=false, $limit = 0)
     {
         $userId = $user['id'];
         $transList = array();
         $params = array("view" => "full");
         if ($history) {
             $params["type"] = "history";
+            if ($limit > 0) {
+                $params["no_loans"] = $limit;
+            }
         }
         $xml = $this->doRestDLFRequest(
             array('patron', $userId, 'circulationActions', 'loans'), $params
@@ -1030,7 +1047,7 @@ class Aleph extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
             }
             $transList[] = array(
                 //'type' => $type,
-                'id' => ($history)?null:$this->barcodeToID($barcode),
+                'id' => $this->barcodeToID($barcode),
                 'item_id' => $group,
                 'location' => $location,
                 'title' => $title,
@@ -1415,7 +1432,7 @@ class Aleph extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
         $address = $xml->xpath('//address-information');
         $address = $address[0];
         $address1 = (string)$address->{'z304-address-1'}; // DM - Prijmeni Jmeno
-	$address2 = (string)$address->{'z304-address-2'}; // DM - Ulice c.p
+        $address2 = (string)$address->{'z304-address-2'}; // DM - Ulice c.p
         $address3 = (string)$address->{'z304-address-3'}; // DM - PSC Mesto
         $address4 = (string)$address->{'z304-address-4'}; // DM - Zeme
         $address5 = (string)$address->{'z304-address-5'}; // DM - Ulice c.p
@@ -1425,10 +1442,10 @@ class Aleph extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
         $dateFrom = (string)$address->{'z304-date-from'};
         $dateTo = (string)$address->{'z304-date-to'};
         if (strpos($address1, ",") === false) {
-	// $recordList['lastname'] = $address1;
-	// $recordList['firstname'] = $address1;
-	    list($recordList['lastname'], $recordList['firstname'])
-		    = explode(" ", $address1);
+        // $recordList['lastname'] = $address1;
+        // $recordList['firstname'] = $address1;
+            list($recordList['lastname'], $recordList['firstname'])
+                    = explode(" ", $address1);
         } else {
             list($recordList['lastname'], $recordList['firstname'])
                 = explode(",", $address2);
@@ -1529,7 +1546,7 @@ class Aleph extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
             array('patron', $patronId, 'record', $resource, 'items', $group)
         );
         $locations = array();
-        $part = $xml->xpath('//pickup-locations');
+        $part = $xml->xpath('//pickup-locations');// DM - misto vypujceni print_r($part);
         if ($part) {
             foreach ($part[0]->children() as $node) {
                 $arr = $node->attributes();
@@ -1553,6 +1570,7 @@ class Aleph extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
         }
         $date = $xml->xpath('//last-interest-date/text()');
         $date = $date[0];
+        // DM - prevod data do ceskeho formatu dd.mm.yyyy
         $date = "" . substr($date, 6, 2) . "." . substr($date, 4, 2) . "."
             . substr($date, 0, 4);
         return array(
@@ -1579,8 +1597,10 @@ class Aleph extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
         }
         if (isset($details['last-interest-date'])) {
             try {
-                return $this->dateConverter
-                    ->convert('d.m.Y', 'U', $details['last-interest-date']);
+                // DM - netreba konvertovat, uz je ve spravnem formatu
+//                return $this->dateConverter
+//                    ->convert('d.m.Y', 'U', $details['last-interest-date']);
+                return $details['last-interest-date'];
             } catch (DateException $e) {
                 // If we couldn't convert the date, fail gracefully.
                 $this->debug(

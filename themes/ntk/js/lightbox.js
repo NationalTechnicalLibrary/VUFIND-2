@@ -258,12 +258,19 @@ var Lightbox = {
    */
   get: function(controller, action, get, post, callback) {
     // Build URL
-    var url = path+'/AJAX/JSON?method=getLightbox&submodule='+controller+'&subaction='+action;
-    if(typeof get !== "undefined" && get !== {}) {
-      url += '&'+$.param(get);
-    }
-    if(typeof post == "undefined") {
-      post = {};
+    // DM - '/vufind/map.php?lcc=mapQ325'; - mapa regalu
+    var prmtr = $.param(get);
+
+    if (prmtr.search("map") > 0){
+      var url = '/vufind/map.php?lcc='+prmtr;
+    }else {
+      var url = path + '/AJAX/JSON?method=getLightbox&submodule=' + controller + '&subaction=' + action;
+      if (typeof get !== "undefined" && get !== {}) {
+        url += '&' + $.param(get);
+      }
+      if (typeof post == "undefined") {
+        post = {};
+      }
     }
     return this.getByUrl(url, post, callback);
   },

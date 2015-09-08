@@ -582,10 +582,11 @@ $config = array(
                 ),
                 'defaultTab' => null,
             ),
+            /* Zde nastaveni zalozek v detailu zaznamu - pridan nahled. */
             'VuFind\RecordDriver\SolrMarc' => array(
                 'tabs' => array(
                     'Holdings' => 'HoldingsILS', 'Description' => 'Description',
-                    'TOC' => 'TOC', 'UserComments' => 'UserComments',
+                    'TOC' => 'TOC', 'Preview' => 'Preview', 'UserComments' => 'UserComments',
                     'Reviews' => 'Reviews', 'Excerpt' => 'Excerpt',
                     'HierarchyTree' => 'HierarchyTree', 'Map' => 'Map',
                     'Details' => 'StaffViewMARC',
@@ -664,6 +665,7 @@ $staticRoutes = array(
     'MyResearch/Recover', 'MyResearch/SaveSearch',
     'MyResearch/StorageRetrievalRequests', 'MyResearch/UserLogin',
     'MyResearch/Verify',
+    'MyResearch/CheckedOutHistory',
     'Primo/Advanced', 'Primo/Home', 'Primo/Search',
     'QRCode/Show', 'QRCode/Unavailable',
     'OAI/Server', 'Pazpar2/Home', 'Pazpar2/Search', 'Records/Home',

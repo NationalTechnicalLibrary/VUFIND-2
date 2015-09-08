@@ -1364,4 +1364,37 @@ class MyResearchController extends AbstractBase
     {
         return intval(substr($hash, -10));
     }
+
+    public function checkedOutHistoryAction()
+    {
+        // Stop now if the user does not have valid catalog credentials available:
+        if (!is_array($patron = $this->catalogLogin())) {
+                return $patron;
+        }
+
+        $currentLimit = $this->params()->fromQuery('limit');
+        if (!isset($currentLimit)) {
+            $currentLimit = 20;
+        }
+
+        // Connect to the ILS:
+        $catalog = $this->getILS();
+
+        // Get history:
+        $result = $catalog->getMyHistory($patron, $currentLimit);
+
+        $transactions = array();
+        foreach ($result as $current) {
+                // Add renewal details if appropriate:
+                $current = $this->renewals()->addRenewDetails(
+                        $catalog, $current, $renewStatus
+                );
+                // Build record driver:
+                $transactions[] = $this->getDriverForILSRecord($current);
+        }
+
+        return $this->createViewModel(
+                array('transactions' => $transactions)
+        );
+    }
 }

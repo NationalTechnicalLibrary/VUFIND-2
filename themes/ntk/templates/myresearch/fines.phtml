@@ -5,7 +5,8 @@
     // Set up breadcrumbs:
     $this->layout()->breadcrumbs = '<li><a href="' . $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a></li> <li class="active">' . $this->transEsc('Fines') . '</li>';
 ?>
-<div class="<?=$this->layoutClass('mainbody')?>">
+<div class="row">
+<div class="col-xs-12 col-md-9 line-right">
   <h2><?=$this->transEsc('Your Fines')?></h2>
   <? if (empty($this->fines)): ?>
     <?=$this->transEsc('You do not have any fines')?>
@@ -44,6 +45,7 @@
   <? endif; ?>
 </div>
 
-<div class="<?=$this->layoutClass('sidebar')?>">
+<div class="col-xs-12 col-sm-3 hidden-print">
   <?=$this->context($this)->renderInContext("myresearch/menu.phtml", array('active' => 'fines'))?>
+</div>
 </div>

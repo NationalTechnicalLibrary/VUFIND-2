@@ -11,8 +11,8 @@ function addSearch(group, term, field)
   // Build the new search
   var inputIndex = $('#group'+group+' input').length;
   var inputID = group+'_'+inputIndex;
-  var newSearch = '<div class="search" id="search'+inputID+'"><div class="row"><div class="col-md-7"><input id="search_lookfor'+inputID+'" class="form-control" type="text" name="lookfor'+group+'[]" value="'+term+'"/></div>'
-    + '<div class="col-md-4"><select id="search_type'+inputID+'" name="type'+group+'[]" class="form-control">';
+  var newSearch = '<div class="search form-inline"><div class="form-group form-group-lg"><input id="search_lookfor'+inputID+'" class="form-control" type="text" name="lookfor'+group+'[]" value="'+term+'"/>'
+    + '</div><div class="form-group"><select id="search_type'+inputID+'" name="type'+group+'[]" class="form-control">';
   for (var key in searchFields) {
     newSearch += '<option value="' + key + '"';
     if (key == field) {
@@ -20,11 +20,11 @@ function addSearch(group, term, field)
     }
     newSearch += ">" + searchFields[key] + "</option>";
   }
-  newSearch += '</select></div><div class="col-md-1"><a class="help-block delete';
+  newSearch += '</select></div><a class="form-field-delete glyphicon glyphicon-remove-circle';
   if(inputIndex == 0) {
     newSearch += ' hidden';
   }
-  newSearch += '" href="#" onClick="deleteSearch('+group+','+inputIndex+')" class="delete">&times;</a></div></div>';
+  newSearch += '" href="#" onClick="deleteSearch('+group+','+inputIndex+')" ></a>';
 
   // Insert it
   $("#group" + group + "Holder").before(newSearch);
@@ -58,12 +58,11 @@ function addGroup(firstTerm, firstField, join)
   if (firstField == undefined) {firstField = '';}
   if (join       == undefined) {join       = '';}
 
-  var newGroup = '<div id="group'+nextGroup+'" class="group well row">'
-    + '<div class="col-md-9"><div class="row"><div class="col-md-3"><label class="help-block">'+searchLabel+':</label></div>'
-    + '<div class="col-md-9"><i id="group'+nextGroup+'Holder" class="fa fa-plus-circle"></i> <a href="#" onClick="addSearch('+nextGroup+')">'+addSearchString+'</a></div></div></div>'
-    + '<div class="col-md-3">'
+  var newGroup = '<div id="group'+nextGroup+'" class="group">'
+    + '<div class="group-header row"><div class="col-md-3"><label class="help-block">'+searchLabel+':</label></div>'
+    + '<div class="col-md-9 text-right"><a href="#" onClick="deleteGroup('+nextGroup+')" class="btn btn-sm btn-link delete" title="'+deleteSearchGroupString+'"><i class="glyphicon glyphicon-minus-sign"></i> '+deleteSearchGroupString+'</a></div></div><div class="row"><div class="col-xs-12"><i class="hidden" id="group'+nextGroup+'Holder" class="fa fa-plus-circle"></i> <a class="btn btn-sm btn-link" href="#" onClick="addSearch('+nextGroup+')"><i id="group'+nextGroup+'Holder" class="fa fa-plus-circle"></i> '+addSearchString+'</a>'
+    + '<div class="group-options form-inline"><div class="form-group">'
     + '<label for="search_bool'+nextGroup+'">'+searchMatch+':&nbsp;</label>'
-    + '<a href="#" onClick="deleteGroup('+nextGroup+')" class="close hidden" title="'+deleteSearchGroupString+'">&times;</a>'
     + '<select id="search_bool'+nextGroup+'" name="bool'+nextGroup+'[]" class="form-control">'
     + '<option value="AND"';
   if(join == 'AND') {
@@ -80,7 +79,7 @@ function addGroup(firstTerm, firstField, join)
     newGroup += ' selected';
   }
   newGroup += '>' +searchJoins['NOT'] + '</option>'
-    + '</select></div></div>';
+    + '</select></div></div></div></div>';
 
   $('#groupPlaceHolder').before(newGroup);
   addSearch(nextGroup, firstTerm, firstField);

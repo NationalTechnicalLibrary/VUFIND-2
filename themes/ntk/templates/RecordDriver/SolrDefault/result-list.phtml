@@ -1,18 +1,18 @@
-<div class="<?=$this->driver->supportsAjaxStatus()?'ajaxItem ':''?>col-xs-11">
-  <div class="row">
-    <div class="col-sm-2 col-xs-3 left">
-      <input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getUniqueID())?>" class="hiddenId" />
-      <input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getResourceSource())?>" class="hiddenSource" />
+<div class="<?=$this->driver->supportsAjaxStatus()?'ajaxItem ':''?>media-left">
+    <input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getUniqueID())?>" class="hiddenId" />
+    <input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getResourceSource())?>" class="hiddenSource" />
+
       <a href="<?=$this->recordLink()->getUrl($this->driver)?>">
         <? if ($summThumb = $this->record($this->driver)->getThumbnail()): ?>
-          <img class="recordcover" src="<?=$this->escapeHtmlAttr($summThumb)?>" alt="<?=$this->transEsc('Cover Image')?>"/>
+          <img class="media-object recordcover" src="<?=$this->escapeHtmlAttr($summThumb)?>" alt="<?=$this->transEsc('Cover Image')?>"/>
         <? else: ?>
-          <img class="recordcover" src="<?=$this->url('cover-unavailable')?>" alt="<?=$this->transEsc('No Cover Image')?>"/>
+          <img class="media-object recordcover" src="<?=$this->url('cover-unavailable')?>" alt="<?=$this->transEsc('No Cover Image')?>"/>
         <? endif; ?>
       </a>
-    </div>
-    <div class="col-sm-7 col-xs-6 middle">
-      <div>
+
+</div>
+<div class="media-body">
+      <h3 class="media-heading">
         <a href="<?=$this->recordLink()->getUrl($this->driver)?>" class="title">
         <?
           $summHighlightedTitle = $this->driver->getHighlightedTitle();
@@ -26,14 +26,16 @@
           }
         ?>
         </a>
-      </div>
+      </h3>
 
-      <div>
+      <small>
         <? if($this->driver->isCollection()): ?>
           <?=implode('<br>', $this->driver->getSummary()); ?>
         <? else: ?>
           <? $summAuthor = $this->driver->getPrimaryAuthor(); if (!empty($summAuthor)): ?>
-          <?=$this->transEsc('by')?>
+          <span class="text-muted">
+            <?=$this->transEsc('by')?>:
+          </span>
           <a href="<?=$this->record($this->driver)->getLink('author', $summAuthor)?>"><?
             $summHighlightedAuthor = $this->driver->getHighlightedAuthor();
             echo !empty($summHighlightedAuthor)
@@ -48,8 +50,8 @@
             <?=/* TODO: handle highlighting more elegantly here */ $this->transEsc('Published in') . ' <a href="' . $this->record($this->driver)->getLink('journaltitle', str_replace(array('{{{{START_HILITE}}}}', '{{{{END_HILITE}}}}'), '', $journalTitle)) . '">' . $this->highlight($journalTitle) . '</a>';?>
             <?=!empty($summDate) ? ' (' . $this->escapeHtml($summDate[0]) . ')' : ''?>
           <? elseif (!empty($summDate)): ?>
-            <?=!empty($summAuthor) ? '<br />' : ''?>
-            <?=$this->transEsc('Published') . ' ' . $this->escapeHtml($summDate[0])?>
+          <span class="text-muted">
+            <?=$this->transEsc('Published') . ': </span> ' . $this->escapeHtml($summDate[0])?>
           <? endif; ?>
           <? $summInCollection = $this->driver->getContainingCollections(); if (!empty($summInCollection)): ?>
             <? foreach ($summInCollection as $collId => $collText): ?>
@@ -62,18 +64,7 @@
             <? endforeach; ?>
           <? endif; ?>
         <? endif; ?>
-      </div>
-
-      <? if(!$this->driver->isCollection()): ?>
-        <? if ($snippet = $this->driver->getHighlightedSnippet()): ?>
-          <? if (!empty($snippet['caption'])): ?>
-            <strong><?=$this->transEsc($snippet['caption']) ?>:</strong> ';
-          <? endif; ?>
-          <? if (!empty($snippet['snippet'])): ?>
-            <span class="quotestart">&#8220;</span>...<?=$this->highlight($snippet['snippet']) ?>...<span class="quoteend">&#8221;</span><br/>
-          <? endif; ?>
-        <? endif; ?>
-      <? endif; ?>
+      </small><br>
 
       <?
       /* Display information on duplicate records if available */
@@ -102,14 +93,19 @@
 
       <div class="callnumAndLocation ajax-availability hidden">
         <? if ($this->driver->supportsAjaxStatus()): ?>
-<!--      <strong class="hideIfDetailed"><?=$this->transEsc('Call Number')?>:</strong>
-          <span class="callnumber ajax-availability hidden">
-            <?=$this->transEsc('Loading')?>...<br/>
-          </span> -->
           <strong><?=$this->transEsc('Located')?>:</strong>
+
+        <? $CallNom = $this->driver->getCallNumber(); ?>
+        <? if (!empty($CallNom)): ?>
+            <a class="help-link" href="/vufind/map.php?lcc=map<?=$CallNom?>">
+        <? endif; ?>
           <span class="location ajax-availability hidden">
             <?=$this->transEsc('Loading')?>...
           </span>
+        <? if (!empty($CallNom)): ?>
+            </a>
+        <? endif; ?>
+
           <div class="locationDetails"></div>
         <? else: ?>
           <? $summCallNo = $this->driver->getCallNumber(); if (!empty($summCallNo)): ?>
@@ -139,7 +135,7 @@
         <? endif; ?>
       <? endif; ?>
 
-      <?=str_replace('class="', 'class="label label-info ', $this->record($this->driver)->getFormatList())?>
+      <?=str_replace('class="', 'class="', $this->record($this->driver)->getFormatList())?>
 
       <? if (!$openUrlActive && empty($urls) && $this->driver->supportsAjaxStatus()): ?>
         <span class="status ajax-availability hidden">
@@ -147,8 +143,7 @@
         </span>
       <? endif; ?>
       <?=$this->record($this->driver)->getPreviews()?>
-    </div>
-    <div class="col-xs-3 right hidden-print">
+
       <? /* Display qrcode if appropriate: */ ?>
       <? if ($QRCode = $this->record($this->driver)->getQRCode("results")): ?>
         <?
@@ -164,12 +159,13 @@
       <? endif; ?>
 
       <? if ($this->userlist()->getMode() !== 'disabled'): ?>
-        <? /* Add to favorites */ ?>
-        <i class="fa fa-heart"></i> <a href="<?=$this->recordLink()->getActionUrl($this->driver, 'Save')?>" class="save-record modal-link" id="<?=$this->driver->getUniqueId() ?>" title="<?=$this->transEsc('Add to favorites')?>"><?=$this->transEsc('Add to favorites')?></a><br/>
-
         <? /* Saved lists */ ?>
         <div class="savedLists alert alert-info hidden">
           <strong><?=$this->transEsc("Saved in")?>:</strong>
+        </div>
+        <? /* Add to favorites */ ?>
+        <div class="result-actions">
+            <a href="<?=$this->recordLink()->getActionUrl($this->driver, 'Save')?>" class="save-record glyphicon glyphicon-star-empty modal-link text-muted" id="<?=$this->driver->getUniqueId() ?>" title="<?=$this->transEsc('Add to favorites')?>"></a>
         </div>
       <? endif; ?>
 
@@ -187,6 +183,5 @@
       <? endif; ?>
 
       <?=$openUrl?'<span class="Z3988" title="'.$this->escapeHtmlAttr($openUrl).'"></span>':''?>
-    </div>
-  </div>
+
 </div>

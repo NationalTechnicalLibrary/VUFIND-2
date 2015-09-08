@@ -71,7 +71,7 @@ abstract class AbstractCover
      *
      * @var bool
      */
-    protected $supportsUid = false;
+    protected $supportsUid = true;
 
     /**
      * Are we allowed to cache images from this source?

@@ -1,14 +1,20 @@
 # GNU Emacs temporary files
-
-ChangeLog
 \#*
 .\#*
 TAGS
 *~
-vendor/.git
 
+# Subrepos
+.git
+
+# Any and all logs
+*.log
+
+# Runtime data and caches
 /local/harvest/
 /solr/biblio/spell*
 /solr/biblio/tlog/
 /solr/**/index/
 /solr/alphabetical_browse/
+/local/cache/*
+/local/harvest/*

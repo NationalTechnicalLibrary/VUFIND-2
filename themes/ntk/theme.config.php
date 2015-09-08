@@ -2,20 +2,18 @@
 return array(
     'extends' => 'root',
     'css' => array(
-        //'vendor/bootstrap.min.css',
-        //'vendor/bootstrap-accessibility.css',
-        //'bootstrap-custom.css',
-        'compiled.css',
         'vendor/font-awesome.min.css',
         'vendor/bootstrap-slider.css',
-        'vendor/styles.css', // ntk css
         'print.css:print',
+        'assets/css/styles.css',
+        'assets/vufind.css',
+        'ntk.css',
+        'datepicker.css',
     ),
     'js' => array(
         'vendor/jquery.min.js',
         'vendor/bootstrap.min.js',
         'vendor/bootstrap-accessibility.min.js',
-        // 'vendor/bootlint.min.js',
         'vendor/typeahead.js',
         'vendor/rc4.js',
         'common.js',
@@ -25,6 +23,9 @@ return array(
         'json-min.js',
         'yui-min.js',
         'NTK.js',
+        'bootstrap-datepicker.js',
+        'bootstrap-datepicker.cs.js',
+        'assets/modernizr.min.js',
     ),
     'less' => array(
         'active' => false,

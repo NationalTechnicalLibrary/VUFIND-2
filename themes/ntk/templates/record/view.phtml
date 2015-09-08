@@ -19,7 +19,8 @@
 ?>
 
 <? if (isset($this->scrollData) && ($this->scrollData['previousRecord'] || $this->scrollData['nextRecord'])): ?>
-  <ul class="pager hidden-print">
+  <ul class="pager breadcrumb-pager hidden-print">
+    <li class="pager-count"><?=$this->escapeHtml($this->scrollData['currentPosition']) . ' ' . $this->transEsc('of') . ' ' . number_format($this->escapeHtml($this->scrollData['resultTotal'])) . ' ' . $this->transEsc('results') ?><li>
     <? if ($this->scrollData['previousRecord']): ?>
       <li>
         <a href="<?=$this->recordLink()->getUrl($this->scrollData['previousRecord'])?>" title="<?=$this->transEsc('Previous Search Result')?>">&laquo; <?=$this->transEsc('Prev')?></a>
@@ -27,7 +28,7 @@
     <? else: ?>
       <li class="disabled"><a href="#">&laquo; <?=$this->transEsc('Prev')?></a></li>
     <? endif; ?>
-    #<?=$this->escapeHtml($this->scrollData['currentPosition']) . ' ' . $this->transEsc('of') . ' ' . number_format($this->escapeHtml($this->scrollData['resultTotal'])) . ' ' . $this->transEsc('results') ?>
+<!--    #--><?//=$this->escapeHtml($this->scrollData['currentPosition']) . ' ' . $this->transEsc('of') . ' ' . number_format($this->escapeHtml($this->scrollData['resultTotal'])) . ' ' . $this->transEsc('results') ?>
     <? if ($this->scrollData['nextRecord']): ?>
       <li>
         <a href="<?=$this->recordLink()->getUrl($this->scrollData['nextRecord'])?>" title="<?=$this->transEsc('Next Search Result')?>"><?=$this->transEsc('Next')?> &raquo;</a>
@@ -37,6 +38,8 @@
     <? endif; ?>
   </ul>
 <? endif; ?>
+<!-- zdanlive div navic, avsak ukoncuje div z predchozi sablony (layout/layout.phtml) pro breadcrumbs panel-->
+</div>
 
 <?=$this->record($this->driver)->getToolbar()?>
 
@@ -55,6 +58,12 @@
         <? foreach ($this->tabs as $tab => $obj): ?>
         <? // add current tab to breadcrumbs if applicable:
           $desc = $obj->getDescription();
+          // DM - zalozka Nahled - zobrazi se jen kdyz v ni neco je
+          if ($desc == 'Preview'){
+            if (!$obj->isDisplayed()){
+              continue;
+            }
+          }
           $isCurrent = (strtolower($this->activeTab) == strtolower($tab));
           if ($isCurrent) {
             $this->layout()->breadcrumbs .= '<li class="active">' . $this->transEsc($desc) . '</li>';

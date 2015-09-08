@@ -270,14 +270,54 @@ class Holds
             foreach ($result as $copy) {
                 $show = !in_array($copy['location'], $this->hideHoldings);
                 if ($show) {
-                    $groupKey = $this->getHoldingsGroupKey($copy);
-                    $holdings[$groupKey][] = $copy;
+                    /* Vsechny jednotky jsou v jednom poli.
+                     * zruseno rozdeleni podle umisteni.
+                     * Priprava na razeni vsech jednotek dohromady. */
+                    $holdings[''][] = $copy;
+
                     // Are any copies available?
                     if ($copy['availability'] == true) {
                         $any_available = true;
                     }
                 }
             }
+
+            // Razeni jednotek:
+            uasort($holdings[''], function($a, $b)
+            {
+                if ((empty($a['description']) && empty($b['description'])) || ($a['description'] == 'Sv. 1' && $b['description'] == 'Sv. 1')){
+                    $poradi = array(
+                            "Volný výběr, k vypůjčení" => 1,
+                            "Sklad, k vypůjčení" => 2,
+                            "Absenčně - 7 dní" => 3,
+                            "Absenčně - 14 dní" => 4,
+                            "Volný výběr, nepůjčuje se" => 5,
+                            "Sklad, nepůjčuje se" => 6,
+                            "Jen pro VŠCHT, nepůjčuje se" => 7,
+                            "Prezenčně - starý tisk" => 8,
+                            "Prezenčně - vzácný tisk" =>9,
+                            "Ve zpracování" => 10,
+                            "Soudní vymáhání" => 11,
+                            "Trvale vypůjčeno" => 12,
+                            "Vyřazeno" => 13,
+                            "Pravděp. ztráta" => 14,
+                            "Ztráta" => 15,
+
+                    );
+
+                    $vysledek = $poradi[$a['status']] - $poradi[$b['status']];
+                    // Kdyz jsou stejne statusy, tak rad podle "pujceno do".
+                    if ($vysledek == 0){
+                            $vysledek = $a['duedate'] - $b['duedate'];
+                    }
+                }else{
+                    $datum1 = preg_match('/([0-9]{4})/',$a['description'], $matches1);
+                    $datum2 = preg_match('/([0-9]{4})/',$b['description'], $matches2);
+                    $vysledek = $matches2[0] - $matches1[0];
+                }
+
+                return $vysledek;
+            });
 
             // Are holds allowed?
             $checkHolds = $this->catalog->checkFunction("Holds");

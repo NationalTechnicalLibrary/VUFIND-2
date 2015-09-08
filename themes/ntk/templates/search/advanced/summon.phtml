@@ -1,5 +1,5 @@
 <? if (!empty($this->facetList) || !empty($this->checkboxFacets)): ?>
-  <fieldset>
+  <fieldset class="checkboxFilter">
     <legend><?=$this->transEsc('Limit To')?></legend>
     <? if (!empty($this->checkboxFacets)): ?>
       <?=$this->render('search/advanced/checkbox-filters.phtml')?>
@@ -21,7 +21,7 @@
             ?>
             <? foreach ($sorted as $i => $display): ?>
               <? $value = $list['list'][$i]; ?>
-              <option value="<?=$this->escapeHtmlAttr(($value['operator'] == 'OR' ? '~' : '') . $field . ':"' . $value['value'] . '"')?>"<?=(isset($value['selected']) && $value['selected'])?' selected="selected"':''?>><?=$this->escapeHtml($display)?></option>
+              <option value="<?=$this->escapeHtmlAttr(($value['operator'] == 'OR' ? '~' : '') . $field . ':"' . $value['value'] . '"')?>"<?=(isset($value['selected']) && $value['selected'])?' selected="selected"':''?>><?=$this->transEsc($display)?></option>
             <? endforeach; ?>
           </select>
         </div>
@@ -29,7 +29,7 @@
     </div>
   </fieldset>
 <? endif; ?>
-<div class="row">
+<!--<div class="row">-->
   <?=$this->render('search/advanced/limit.phtml')?>
   <?=$this->render('search/advanced/ranges.phtml')?>
-</div>
+<!--</div>-->

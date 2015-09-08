@@ -8,7 +8,7 @@
 ?>
 
 <div class="row">
-  <div class="<?=$this->layoutClass('mainbody')?>">
+  <div class="col-xs-12 col-md-9 line-right">
     <? if (!empty($this->saved)): ?>
       <h2><?=$this->transEsc("history_saved_searches")?></h2>
       <?=$this->context()->renderInContext('search/history-table.phtml', array('showSaved' => true));?>
@@ -22,7 +22,7 @@
     <? endif; ?>
   </div>
 
-  <div class="<?=$this->layoutClass('sidebar')?>">
+  <div class="col-xs-12 col-sm-3 hidden-print">
     <?=$this->context($this)->renderInContext(
         "myresearch/menu.phtml",
         // Only activate search history in account menu if user is logged in.

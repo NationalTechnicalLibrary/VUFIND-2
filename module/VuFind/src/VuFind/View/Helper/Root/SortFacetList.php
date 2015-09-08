@@ -41,7 +41,7 @@ use Zend\View\Helper\AbstractHelper;
 class SortFacetList extends AbstractHelper
 {
     /**
-     * Turns facet information into an alphabetical list.
+     * Turns facet information into a frequence-based list.
      *
      * @param \VuFind\Search\Base\Results $results     Search result object
      * @param string                      $field       Facet field to sort
@@ -63,7 +63,6 @@ class SortFacetList extends AbstractHelper
                 . $results->getUrlQuery()->addFacet($field, $value['value']);
             $facets[$url] = $value['displayText'];
         }
-        natcasesort($facets);
         return $facets;
     }
 }

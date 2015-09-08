@@ -1,8 +1,8 @@
 /**
-* Custom Collection via 910 indexing script
-* MJ.@NTK <2013-07>  
-*
-*/
+ * Custom Collection via 910 indexing script
+ *
+ * @author Milan Janíček
+ */
 
 
 import org.marc4j.marc.Record;
@@ -14,10 +14,8 @@ org.solrmarc.index.SolrIndexer indexer = null;
 
 
 /**
-*
-*  select collection according 910 filed (can be multiplied)
-*
-*/
+ * Select collection according 910 filed (can be multiplied).
+ */
 
 
 public Set getCollections(Record record) {
@@ -27,30 +25,32 @@ public Set getCollections(Record record) {
   List list910  = record.getVariableFields("910");
 
   /* set:
-     *  NTK for $$910a eq ABA013
-     *  VSCHT for $$910a eq ABD025
-     *  NTK in other cases  (?)
-  */ 
+   *  NTK for $$910a eq ABA013
+   *  VSCHT for $$910a eq ABD025
+   *  NTK in other cases  (?)
+   */ 
 
   for (VariableField vf : list910) {
     DataField df = (DataField) vf;
-    sigla = df.getSubfield('a').getData().toUpperCase();
-// print (sigla);
-    switch (sigla) {
-/* it should be also possible to use sigla as id in SOLR...*/
-     case "ABA013" : result.add("NTK"); 
-   		     break;
-     case "ABD025" : result.add("VSCHT");
-                     break;
-     default:	     result.add("NTK");
+
+    // Pridana podminka pro neprazdnost MARC pole 910 s kodem sbirky.
+    // Nektere zaznamy jinak neprochazi.
+    if(df.getSubfield('a') != null) {
+      sigla = df.getSubfield('a').getData().toUpperCase();
+      switch (sigla) {
+        /* It should be also possible to use sigla as id in SOLR... */
+        case "ABA013" : result.add("NTK"); 
+                        break;
+        case "ABD025" : result.add("VSCHT");
+                        break;
+        default:	     result.add("NTK");
+      }
     }
-
   }
-// print (result.toString());
-  if (result.isEmpty()) {
-//   print("empty result");
-  return null;
- }
- return result;
 
+  if (result.isEmpty()) {
+    return null;
+  }
+
+  return result;
 }

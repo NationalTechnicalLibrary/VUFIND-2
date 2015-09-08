@@ -1,27 +1,48 @@
-<hr/>
 <div class="row">
-  <div class="col-sm-4">
-    <p><strong><?=$this->transEsc('Search Options')?></strong></p>
-    <ul>
-      <li><a href="<?=$this->url('search-history')?>"><?=$this->transEsc('Search History')?></a></li>
-      <li><a href="<?=$this->url('search-advanced')?>"><?=$this->transEsc('Advanced Search')?></a></li>
+  <div class="col-xs-12">
+    <ul role="navigation" class="nav nav-footer">
+      <li><span class="nav-title"><?=$this->transEsc('Search Options')?></span>
+        <ul>
+          <li><a href="<?=$this->url('search-history')?>"><?=$this->transEsc('Search History')?></a></li>
+          <li><a href="<?=$this->url('search-advanced')?>"><?=$this->transEsc('Advanced Search')?></a></li>
+        </ul>
+      </li>
+
+      <li><span class="nav-title"><?=$this->transEsc('Find More')?></span>
+        <ul>
+          <li><a href="<?=$this->url('browse-home')?>"><?=$this->transEsc('Browse the Catalog')?></a></li>
+          <li><a href="<?=$this->url('alphabrowse-home')?>"><?=$this->transEsc('Browse Alphabetically')?></a></li>
+          <li><a href="https://www.techlib.cz/cs/83165-nove-knihy"><?=$this->transEsc('New Items')?></a></li>
+        </ul>
+      </li>
+
+      <li><span class="nav-title"><?=$this->transEsc('Need Help?')?></span>
+        <ul>
+          <li><a href="<?=$this->url('help-home')?>?topic=search" class="help-link" title="<?=$this->transEsc('Search Tips')?>"><?=$this->transEsc('Search Tips')?></a></li>
+          <li><a href="http://www.ptejteseknihovny.cz/"><?=$this->transEsc('Ask a Librarian')?></a></li>
+          <li><a href="https://www.techlib.cz/cs/2884-navody"><?=$this->transEsc('FAQs')?></a></li>
+        </ul>
+      </li>
+
+      <li><span class="nav-title"><?=$this->transEsc('In collaboration with')?></span>
+        <ul>
+          <li><a href="http://www.obalkyknih.cz/" title="Obálky knih"><?=$this->transEsc('Obálky knih')?></a></li>
+        </ul>
+      </li>
+
     </ul>
-  </div>
-  <div class="col-sm-4">
-    <p><strong><?=$this->transEsc('Find More')?></strong></p>
-    <ul>
-      <li><a href="<?=$this->url('browse-home')?>"><?=$this->transEsc('Browse the Catalog')?></a></li>
-      <li><a href="<?=$this->url('alphabrowse-home')?>"><?=$this->transEsc('Browse Alphabetically')?></a></li>
-      <li><a href="<?=$this->url('search-reserves')?>"><?=$this->transEsc('Course Reserves')?></a></li>
-      <li><a href="<?=$this->url('search-newitem')?>"><?=$this->transEsc('New Items')?></a></li>
-    </ul>
-  </div>
-  <div class="col-sm-4">
-    <p><strong><?=$this->transEsc('Need Help?')?></strong></p>
-    <ul>
-      <li><a href="<?=$this->url('help-home')?>?topic=search" class="help-link" title="<?=$this->transEsc('Search Tips')?>"><?=$this->transEsc('Search Tips')?></a></li>
-      <li><a href="#"><?=$this->transEsc('Ask a Librarian')?></a></li>
-      <li><a href="#"><?=$this->transEsc('FAQs')?></a></li>
-    </ul>
+
+    <div class="footer-info">
+      <i title="Piktogram NTK" class="ntk-pictogram pull-left"></i>
+      <p class="pull-left">
+        Technická 6/2710, 160 80 Praha 6 - Dejvická<br>
+        <a href="mailto:info@techlib.cz">info@techlib.cz</a>, tel.: 222 22 18 18
+      </p>
+      <p class="pull-right">
+        <a href="https://www.techlib.cz/cs/82763"><?=$this->transEsc('Privacy')?></a>
+        <a href="http://www.techlib.cz/cs/2690-pristupy-a-opravneni"><?=$this->transEsc('Access & Privileges')?></a>
+        Copyright &copy; 2006 - 2015
+      </p>
+    </div>
   </div>
 </div>

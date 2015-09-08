@@ -15,7 +15,15 @@
     echo ($this->pickup);
 
 }else{ ?>
-    <p class="lead" xmlns="http://www.w3.org/1999/html"><?=$this->transEsc('request_place_text')?></p>
+    <p class="lead" xmlns="http://www.w3.org/1999/html">
+        <?
+            if ($_GET["order"] == 1){
+                print_r($this->transEsc('request_place_text_order'));
+            }else{
+                print_r($this->transEsc('request_place_text'));
+            }
+        ?>
+    </p>
     <? if ($this->helpText): ?>
     <p class="helptext"><?=$this->helpText?></p>
     <? endif; ?>
@@ -37,10 +45,18 @@
             <label class="col-sm-3 control-label"><?=$this->transEsc("hold_required_by")?>:</label>
             <div class="col-sm-9">
               <input id="requiredByDate" type="text" name="gatheredDetails[requiredBy]" value="<?=(isset($this->gatheredDetails['requiredBy']) && !empty($this->gatheredDetails['requiredBy'])) ? $this->escapeHtmlAttr($this->gatheredDetails['requiredBy']) : $this->escapeHtmlAttr($this->defaultRequiredDate)?>" size="8" class="form-control"/>
-              (<?=$this->dateTime()->getDisplayDateFormat()?>)
+                <i style="float: right; top: -30px; width: 19px; margin: 2px;" class="glyphicon glyphicon-calendar"></i>
             </div>
           </div>
         <? endif; ?>
+          <script type="text/javascript">
+              // When the document is ready
+              $(document).ready(function () {
+                  $('#requiredByDate').datepicker({
+                      format: "dd.mm.yyyy",language: '<?=$this->layout()->userLang?>', orientation: 'bottom left'
+                  });
+              });
+          </script>
 
         <? $showRequestGroups = in_array("requestGroup", $this->extraHoldFields)
             && (empty($this->gatheredDetails['level'])
@@ -112,7 +128,6 @@
                     <input name="gatheredDetails[pickUpLocation]" value="<?=$this->pickup[0]['locationID']?>" class="form-control" size="8" type="hidden" />
                     <input value="<?=$this->transEsc($this->pickup[0]['locationID'])?>" class="form-control" size="8" />
                     </input>
-                    <span class="glyphicon glyphicon-calendar"></span>
                 </div>
             </div>
           <? endif; ?>

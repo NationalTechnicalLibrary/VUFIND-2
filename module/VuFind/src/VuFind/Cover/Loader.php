@@ -273,7 +273,7 @@ class Loader implements \Zend\Log\LoggerAwareInterface
             : substr(preg_replace('/[^0-9X]/', '', strtoupper($issn)), 0, 8);
         $this->oclc = $oclc;
         $this->upc = $upc;
-        $this->uid = $uid;error_log('uid je: ' . $uid . 'vis?');error_log('uid je: ' . $uid . 'vis?');
+        $this->uid = $uid;
         $this->type = preg_replace("/[^a-zA-Z]/", "", $type);
         $this->size = $size;
 
@@ -358,7 +358,7 @@ class Loader implements \Zend\Log\LoggerAwareInterface
      * @return bool        True if image loaded, false on failure.
      */
     protected function fetchFromAPI()
-    {error_log('kurde');
+    {
         // Check that we have at least one valid identifier:
         $ids = $this->getIdentifiers();
         if (empty($ids)) {
@@ -367,7 +367,7 @@ class Loader implements \Zend\Log\LoggerAwareInterface
 
         // Set up local file path:
         $this->localFile = $this->determineLocalFile($ids);
-        if (is_readable($this->localFile)) {error_log('Cachovano');
+        if (is_readable($this->localFile)) {
             // Load local cache if available
             $this->contentType = 'image/jpeg';
             $this->image = file_get_contents($this->localFile);
@@ -380,7 +380,7 @@ class Loader implements \Zend\Log\LoggerAwareInterface
                 $key = isset($provider[1]) ? trim($provider[1]) : null;
                 try {
                     $handler = $this->apiManager->get($apiName);
-                    error_log('zpracovava se');
+
                     // Is the current provider appropriate for the available data?
                     if ($handler->supports($ids)) {
                         if ($url = $handler->getUrl($key, $this->size, $ids)) {
@@ -613,7 +613,7 @@ class Loader implements \Zend\Log\LoggerAwareInterface
     {
         // If caching is allowed at the source level, let's see if it's locally
         // configured....
-        if ($allowCache) {error_log('allow cache');
+        if ($allowCache) {
             // All other services cache based on configuration:
             $conf = isset($this->config->Content->coverimagesCache)
                 ? trim(strtolower($this->config->Content->coverimagesCache)) : true;
@@ -628,7 +628,7 @@ class Loader implements \Zend\Log\LoggerAwareInterface
                 $source = strtolower($source);
                 $cache = in_array($source, $conf);
             }
-        } else {error_log('NEcache');
+        } else {
             $cache = false;
         }
         return $this->processImageURL($url, $cache);
@@ -658,7 +658,7 @@ class Loader implements \Zend\Log\LoggerAwareInterface
         // $cache is true or for temporary display purposes if $cache is false.
         $tempFile = str_replace('.jpg', uniqid(), $this->localFile);
         $finalFile = $cache ? $this->localFile : $tempFile . '.jpg';
-error_log('OBRAZEK');
+
         // Write image data to disk:
         if (!@file_put_contents($tempFile, $image)) {
             throw new \Exception("Unable to write to image directory.");

@@ -36,52 +36,53 @@
 <? $holdingTitleHold = $this->driver->tryMethod('getRealTimeTitleHold'); if (!empty($holdingTitleHold)): ?>
     <a class="placehold modal-link" title="<?=$this->transEsc('request_place_text')?>" href="<?=$this->recordLink()->getRequestUrl($holdingTitleHold)?>"><i class="fa fa-flag"></i>&nbsp;<?=$this->transEsc('title_hold_place')?></a>
 <? endif; ?>
+<?
+    if ($holdings['']['items'][0]['eiz'] == 1){
+        print_r($this->driver->infoText());
+    }
+?>
 <? if (!empty($urls) || $openUrl): ?>
-  <h3><?=$this->transEsc("Internet")?></h3>
+  <h3 style="margin-bottom: -5px;"><?=$this->transEsc("On-line")?></h3>
   <? if (!empty($urls)): ?>
     <? foreach ($urls as $current): ?>
       <a href="<?=$this->escapeHtmlAttr($this->proxyUrl($current['url']))?>"><?=$this->escapeHtml($current['desc'])?></a><br/>
     <? endforeach; ?>
   <? endif; ?>
   <? if ($openUrl): ?><?=$this->openUrl($openUrl);?><? endif; ?>
+  </br></br>
 <? endif; ?>
+
+<table class="table" summary="<?=$this->transEsc('Holdings details from')?> <?=$this->transEsc($holding['location'])?>">
+    <!-- tabulka jednotek, zahlavi -->
+    <tbody>
+    <tr>
+        <th>
+            <?=$this->transEsc('Status')?>
+        </th>
+        <th>
+            <?=$this->transEsc('Sublibrary')?>
+        </th>
+        <th>
+            <?=$this->transEsc('Description')?>
+        </th>
+        <th>
+            <?=$this->transEsc('Location')?>
+        </th>
+        <th>
+            <?=$this->transEsc('LCC Callnumber')?>
+        </th>
+        <th>
+            <?=$this->transEsc('Old Callnumber')?>
+        </th>
+    </tr>
+
 <? foreach ($holdings as $holding): ?>
-<h3><?=$this->transEsc($holding['location'])?></h3>
-<table class="table table-striped" summary="<?=$this->transEsc('Holdings details from')?> <?=$this->transEsc($holding['location'])?>">
-<!-- DM - tabulka jednotek, zahlavi -->
-  <tr>
-        <td>
-                <?=$this->transEsc('Status')?>
-        </td>
-        <td>
-                <?=$this->transEsc('Sublibrary')?>
-        </td>
-        <td>
-                <?=$this->transEsc('Location')?>
-        </td>
-        <td>
-                <?=$this->transEsc('LCC Callnumber')?>
-        </td>
-        <td>
-                <?=$this->transEsc('Old Callnumber')?>
-        </td>
-  </tr>
   <? if (!empty($holding['summary'])): ?>
   <tr>
     <th><?=$this->transEsc("Volume Holdings")?>: </th>
     <td>
       <? foreach ($holding['summary'] as $current): ?>
         <?=$this->escapeHtml($current)?><br/>
-      <? endforeach; ?>
-    </td>
-  </tr>
-  <? endif; ?>
-  <? if (!empty($holding['notes'])): ?>
-  <tr>
-    <th><?=$this->transEsc("Notes")?>: </th>
-    <td>
-      <? foreach ($holding['notes'] as $data): ?>
-        <?=$this->escapeHtml($data)?><br/>
       <? endforeach; ?>
     </td>
   </tr>
@@ -93,7 +94,6 @@
     <? $checkILLRequest = (isset($row['checkILLRequest']) && $row['checkILLRequest']); ?>
     <? if (isset($row['barcode']) && $row['barcode'] != ""): ?>
       <tr vocab="http://schema.org/" typeof="Offer">
-<!--    <th><?=$this->transEsc("Copy")?> <?=$this->escapeHtml($row['number'])?></th>-->
         <td>
           <? if ($row['reserve'] == "Y"): ?>
             <link property="availability" href="http://schema.org/InStoreOnly" />
@@ -105,10 +105,14 @@
             <? if ($row['availability']): ?>
 	      <? /* Begin Available Items (Holds) */ ?>
 	       <link property="availability" href="http://schema.org/InStock" />
-               <!-- DM - zobrazeni statusu -->
-               <span class="available"><?=$this->transEsc($row['status'])?></span>
+               <!-- zobrazeni statusu -->
+                <? if (preg_match('/nepůjčuje se/',$row['status']) || preg_match('/Prezenčně/',$row['status'])): ?>
+                    <span class="blue-status" data-toggle="tooltip" title="<?=$this->transEsc($row['tooltip'])?>"><?=$this->transEsc($row['status'])?></span>
+                <? else: ?>
+                    <span class="available-status" data-toggle="tooltip" title="<?=$this->transEsc($row['tooltip'])?>"><?=$this->transEsc($row['status'])?></span>
+                <? endif; ?>
               <? if (isset($row['link']) && $row['link']): ?>
-                <a style="display:inline-block" class="<?=$check ? 'checkRequest ' : ''?>inlineblock modal-link placehold" href="<?=$this->recordLink()->getRequestUrl($row['link'])?>" title="<?=$this->transEsc($check ? "Check Hold" : "Place a Hold")?>"><i class="fa fa-flag"></i>&nbsp;<?=$this->transEsc($check ? "Check Hold" : "Place a Hold")?></a>
+                <a style="display:inline-block" class="<?=$check ? 'checkRequest ' : ''?>inlineblock modal-link placehold" href="<?=$this->recordLink()->getRequestUrl($row['link'], '&order=1')?>" title="<?=$this->transEsc($check ? "Check Hold" : "Place a Hold")?>"><i class="fa fa-flag"></i>&nbsp;<?=$this->transEsc($check ? "Check Hold" : "Place a Hold")?></a>
               <? endif; ?>
               <? if (isset($row['storageRetrievalRequestLink']) && $row['storageRetrievalRequestLink']): ?>
                 <a class="<?=$checkStorageRetrievalRequest ? 'checkStorageRetrievalRequest ' : ''?>modal-link placeStorageRetrievalRequest" href="<?=$this->recordLink()->getRequestUrl($row['storageRetrievalRequestLink'])?>" title="<?=$this->transEsc($checkStorageRetrievalRequest ? "storage_retrieval_request_check_text" : "storage_retrieval_request_place_text")?>"><i class="fa fa-flag"></i>&nbsp;<?=$this->transEsc($checkStorageRetrievalRequest ? "storage_retrieval_request_check_text" : "storage_retrieval_request_place_text")?></a>
@@ -118,16 +122,20 @@
               <? endif; ?>
             <? else: ?>
               <? /* Begin Unavailable Items (Recalls) */ ?>
-              <span class="text-danger"><?=$this->transEsc($row['status'])?><link property="availability" href="http://schema.org/OutOfStock" /></span>
+              <span class="text-danger" data-toggle="tooltip" title="<?=$this->transEsc($row['tooltip'])?>"><?=$this->transEsc($row['status'])?><link property="availability" href="http://schema.org/OutOfStock" /></span>
               <? if (isset($row['returnDate']) && $row['returnDate']): ?>&ndash; <span class="small"><?=$this->escapeHtml($row['returnDate'])?></span><? endif; ?>
-              <? if (isset($row['duedate']) && $row['duedate']): ?>
-                &ndash; <span class="small"><?=$this->transEsc("Due")?>: <?=$this->escapeHtml($row['duedate'])?></span>
+              <? if (isset($row['duedate']) && ($row['duedate']) && (preg_match('#[\d]#',$row['duedate']))): ?>
+                <br><span class="small" data-toggle="tooltip" title="<?=$this->transEsc('Exemplář má vypůjčený jiný zákazník. Pokud si ho rezervujete, bude pro vás připraven u Centrálního pultu ve 2. NP po vrácení předchozím zákazníkem.')?>"><?=$this->transEsc("checkedout")?>: <?=$this->escapeHtml($row['duedate'])?></span>
               <? endif; ?>
               <? if (isset($row['requests_placed']) && $row['requests_placed'] > 0): ?>
                 <span><?=$this->transEsc("Requests")?>: <?=$this->escapeHtml($row['requests_placed'])?></span>
               <? endif; ?>
               <? if (isset($row['link']) && $row['link']): ?>
-                <a class="<?=$check ? 'checkRequest' : ''?> modal-link inlineblock placehold" href="<?=$this->recordLink()->getRequestUrl($row['link'])?>"><i class="fa fa-flag"></i>&nbsp;<?=$this->transEsc($check ? "Check Recall" : "Recall This")?></a>
+                <br>
+                        <? if (isset($row['duedate']) && ($row['duedate']) && !(preg_match('#[\d]#',$row['duedate']))): ?>
+                            <?=$this->transEsc($row['duedate'])?>
+                        <? endif; ?>
+                <a class="<?=$check ? 'checkRequest' : ''?> modal-link inlineblock placehold loc" href="<?=$this->recordLink()->getRequestUrl($row['link'])?>">&nbsp;<?=$this->transEsc($check ? "Check Recall" : "Recall This")?>&nbsp;</a>
               <? endif; ?>
             <? endif; ?>
           <? endif; ?>
@@ -145,13 +153,42 @@
             <link property="businessFunction" href="http://purl.org/goodrelations/v1#LeaseOut" />
             <link property="itemOffered" href="#record" />
 	</td>
-	<!-- DM - dalsi sloupce tabulky jednotek -->
+	<!-- dalsi sloupce tabulky jednotek -->
         <td>    <!-- Sublibrary -->
-                <?=$this->escapeHtml($row['sub_lib_desc'])?>
+                <?=$this->transEsc($row['sub_lib_desc'])?>
+        </td>
+        <td>    <!-- Description -->
+                <?=$this->escapeHtml($row['description'])?>
         </td>
 
         <td>    <!-- Location -->
-                <?=$this->escapeHtml($row['collection_desc'])?>
+
+        <? if ($row['sub_lib_desc'] == 'VŠCHT ústavy'): ?>
+            <a href="http://www.chemtk.cz/cs/82950-seznam-ustavnich-knihoven">
+        <? elseif (empty($row['callnumber_second'])): ?>
+
+        <? else: ?>
+            <? if (preg_match("/\\d/", $row['collection_desc']) > 0): ?>
+                <?$LCC = explode(" ", $row['callnumber_second']);?>
+                <a class="help-link" href="/vufind/map.php?lcc=map<?=$LCC[0]?>">
+            <? endif; ?>
+        <? endif; ?>
+
+         <? if (($row['availability']) && ($row['sub_lib_desc'] !== 'VŠCHT ústavy')): ?>
+            <span class="loc">&nbsp;
+         <? endif; ?>
+
+            <?if ($this->layout()->userLang === 'cs'):?>
+                <span data-toggle="tooltip" title="<?=$this->transEsc($row['tooltip-vscht'])?>"><?=$this->escapeHtml($row['collection_desc'])?></span>
+            <? else: ?>
+                <?=$this->escapeHtml($row['collection'])?>
+            <? endif; ?>
+
+         <? if ($row['availability']): ?>
+                &nbsp;</span>
+         <? endif; ?>
+
+            </a>
         </td>
 
         <td>    <!-- LCC Callnumber -->
@@ -173,8 +210,9 @@
       </td>
     </tr>
   <? endif; ?>
-</table>
 <? endforeach; ?>
+</tbody>
+</table>
 
 <? $history = $this->driver->getRealTimeHistory(); ?>
 <? if (is_array($history) && !empty($history)): ?>
@@ -185,3 +223,9 @@
   <? endforeach; ?>
 </table>
 <? endif; ?>
+
+<script>
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();
+});
+</script>
