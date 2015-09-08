@@ -2,19 +2,24 @@
 \#*
 .\#*
 TAGS
-*~
 
-# Subrepos
-.git
+# Backup files
+*~
+*.bak
+*.back
+*.old
 
 # Any and all logs
 *.log
+*.log.[0-9]*
 
 # Runtime data and caches
-/local/harvest/
-/solr/biblio/spell*
-/solr/biblio/tlog/
-/solr/**/index/
 /solr/alphabetical_browse/
-/local/cache/*
-/local/harvest/*
+/solr/**/spell*
+/solr/**/index
+/solr/**/tlog
+/local/cache/
+/local/harvest/*/
+/data/cache/*
+/local/config/vufind/config.ini
+/local/httpd-vufind.conf
