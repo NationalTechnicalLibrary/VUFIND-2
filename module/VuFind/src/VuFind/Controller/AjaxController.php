@@ -384,26 +384,26 @@ class AjaxController extends AbstractBase
         }
         else {
             switch ($collection_code) {
-                            case 002:
-                                    $location = $this->translate("Stack room"); // sklad
-                                    break;
-                            case 011:
-                                $location = $this->translate("Depository"); // depozitar
-                                    break;
-                            case 004:
-                                    $location = $this->translate("Book news, 4th floor"); // novinky 4. NP
-                                    break;
-                            case 01:
-                                    $location = $this->translate("Reading room of historical fund"); // badatelna HF
-                                    break;
-                            case 02:
-                                    $location = $this->translate("Safe of historical fund"); // trezor HF
-                                    break;
-                            case 03:
-                                    $location = $this->translate("Stack room of historical fund"); // skald HF
-                                    break;
-                            default:
-                                    $location = $this->translate("Unknown");
+                case 002:
+                        $location = $this->translate("Stack room"); // sklad
+                        break;
+                case 011:
+                    $location = $this->translate("Depository"); // depozitar
+                        break;
+                case 004:
+                        $location = $this->translate("Book news, 4th floor"); // novinky 4. NP
+                        break;
+                case 01:
+                        $location = $this->translate("Reading room of historical fund"); // badatelna HF
+                        break;
+                case 02:
+                        $location = $this->translate("Safe of historical fund"); // trezor HF
+                        break;
+                case 03:
+                        $location = $this->translate("Stack room of historical fund"); // skald HF
+                        break;
+                default:
+                        $location = $this->translate("Unknown");
             }
         }
         $availability_message = $use_unknown_status

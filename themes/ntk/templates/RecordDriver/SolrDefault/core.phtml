@@ -91,7 +91,7 @@
           <th><?=$this->transEsc('Source document')?>: </th>
           <td>
             <? if (!empty($sourceDoc['issn'])): ?>
-              <a href="/vufind/Search/Results?lookfor=<?=$sourceDoc['issn'][0]?>&type=ISN">
+              <a href="/Search/Results?lookfor=<?=$sourceDoc['issn'][0]?>&type=ISN">
                 <?=$sourceDoc['title'][0]?>
               </a>
             <? else: ?>

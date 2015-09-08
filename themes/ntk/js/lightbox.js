@@ -420,7 +420,33 @@ $(document).ready(function() {
     if(typeof title === "undefined") {
       title = $(this).html();
     }
-    $('#modal .modal-title').html(title);
+
+    var p,s,r,vysledek;
+    if((title.search('Novinky') > 0) || (title.search('Neznámo') > 0) || (title.search('Tip') >= 0) || (title.search('Unknown') > 0) || (title.search('news') > 0) ){
+	   vysledek = title;
+    }else{
+	    if (title.search('Shelf') > 0){
+	    	p = 'floor';
+		s = 'section';
+		r = 'shelf';
+	    }else{
+		    p = 'patro';
+		    s = 'sekce';
+		    r = 'regál';
+	    }
+	 var patro = title.charAt(48);
+	 title_desc = p+': '+patro;
+         var sekce = title.charAt(49);
+         title_desc += ', '+s+': '+sekce;
+         var regal = title.substr(50,3);
+         title_desc += ', '+r+': '+regal;
+	
+	 title_desc = ' ('+title_desc+')';
+	 var position = title.search('</'); 
+	vysledek = [title.slice(0, position), title_desc, title.slice(position)].join('');
+    }
+    
+    $('#modal .modal-title').html(vysledek);
     Lightbox.titleSet = true;
   });
 });

@@ -5,7 +5,7 @@ return array(
         'vendor/font-awesome.min.css',
         'vendor/bootstrap-slider.css',
         'print.css:print',
-        'assets/css/styles.css',
+        'assets/styles.css',
         'assets/vufind.css',
         'ntk.css',
         'datepicker.css',

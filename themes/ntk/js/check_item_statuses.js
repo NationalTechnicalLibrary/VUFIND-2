@@ -16,8 +16,7 @@ function checkItemStatuses() {
     success: function(response) {
       if(response.status == 'OK') {
         $.each(response.data, function(i, result) {
-          /* zmena prvku, kvuli zmene css pozicovani */
-          var item = $($('.result')[result.record_number]);
+          var item = $($('.result')[result.record_number]); // DM - zmena prvku, kvuli zmene css pozicovani
 
           item.find('.status').empty().append(result.availability_message);
           if (typeof(result.full_status) != 'undefined'
