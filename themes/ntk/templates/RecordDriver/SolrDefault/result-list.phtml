@@ -93,9 +93,6 @@
 
       <div class="callnumAndLocation ajax-availability hidden">
         <? if ($this->driver->supportsAjaxStatus()): ?>
-          <span class="callnumber ajax-availability hidden">
-            <?=$this->transEsc('Loading')?>...<br/>
-          </span> -->
           <strong><?=$this->transEsc('Located')?>:</strong>
 
         <? $CallNom = $this->driver->getCallNumber(); ?>
