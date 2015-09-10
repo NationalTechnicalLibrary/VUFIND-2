@@ -97,7 +97,7 @@
 
         <? $CallNom = $this->driver->getCallNumber(); ?>
         <? if (!empty($CallNom)): ?>
-            <a class="help-link" href="/vufind/map.php?lcc=map<?=$CallNom?>">
+            <a class="help-link map-link" href="/vufind/map.php?lcc=map<?=$CallNom?>">
         <? endif; ?>
           <span class="location ajax-availability hidden">
             <?=$this->transEsc('Loading')?>...
