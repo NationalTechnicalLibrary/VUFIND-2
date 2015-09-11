@@ -8,6 +8,7 @@ TAGS
 *.bak
 *.back
 *.old
+*.backup
 
 # Any and all logs
 *.log
