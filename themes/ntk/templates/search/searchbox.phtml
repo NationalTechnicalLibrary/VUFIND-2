@@ -38,7 +38,7 @@ $lastLimit = $options->getLastLimit();
     <form role="search" class="search form-table" method="get" action="<?=$this->url($basicSearch)?>" name="searchForm" id="searchForm" autocomplete="off">
         <div class="form-group" id="autoCompleteContainer">
             <label class="sr-only" for="lookfor">Vyhledávat:</label>
-            <input class="form-control search-query<? if($this->searchbox()->autocompleteEnabled($this->searchClassId)):?> autocomplete searcher:<?=$this->escapeHtmlAttr($this->searchClassId) ?><? endif ?>" id="lookfor" type="text" name="lookfor" size="30" placeholder="Souhrné vyhledávání" value="<?=$this->escapeHtmlAttr($this->lookfor)?>" x-webkit-speech speech />
+	    <input class="form-control search-query<? if($this->searchbox()->autocompleteEnabled($this->searchClassId)):?> autocomplete searcher:<?=$this->escapeHtmlAttr($this->searchClassId) ?><? endif ?>" id="lookfor" type="text" name="lookfor" size="30" placeholder="<?=$this->transEsc('integrated_search')?>" value="<?=$this->escapeHtmlAttr($this->lookfor)?>" x-webkit-speech speech />
         </div>
         <div class="form-group" id="search-select">
             <label class="sr-only" for="lookfor">Typ pole:</label>
