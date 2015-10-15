@@ -1,8 +1,11 @@
 <?
     // Set up convenience variables:
-    $account = $this->auth()->getManager();
+	$account = $this->auth()->getManager();
+	$filters = $this->tab->getFilters();
+	$selectedFilters = $this->tab->getSelectedFilters();
+	$availableFilters = $this->tab->getAvailableFilters();
     $user = $account->isLoggedIn();
-    $holdings = $this->driver->getRealTimeHoldings();
+	$holdings = $this->tab->getRealTimeHoldings();
     $openUrl = $this->driver->openURLActive('holdings') ? $this->driver->getOpenURL() : false;
     $offlineMode = $this->ils()->getOfflineMode();
     // Account for replace_other_urls setting
@@ -51,7 +54,36 @@
   <? if ($openUrl): ?><?=$this->openUrl($openUrl);?><? endif; ?>
   </br></br>
 <? endif; ?>
-
+<div class="holdings-filters breadcrumb-panel">
+	<? foreach($filters as $name => $values):?>
+		<? if (!empty($values)):?>
+			<? $filterName = $this->escapeHtml($name . '_filter');?>
+			<? $selectedVal = $selectedFilters[$name];?>
+			<? $type = $availableFilters[$name]['type'];?>
+			<div class="col-xs-4">	
+				<form class="form-inline" name="<?=$this->escapeHtml($name)?>_filter">
+				<?if ($type == 'select'):?>
+					<label for="<?=$this->escapeHtml($name)?>"><?=$this->transEsc($filterName)?> : </label>
+					<select class="form-control filter-select" name="<?=$this->escapeHtml($name)?>" onchange="document.forms['<?=$filterName?>'].submit()">
+						<option value=""><?=$this->transEsc('all')?></option>
+						<? foreach($values as $value):?>
+							<option value="<?=$this->escapeHtml($value)?>" <?=($selectedVal == $value)?'selected="selected"':''?>><?=$this->escapeHtml($value)?></option> 
+						<? endforeach;?>
+					</select>
+				<?endif;?>
+				<?if ($type == 'checkbox'):?>
+					<input type="checkbox" name="<?=$this->escapeHtml($name)?>" value="true"
+					onchange="document.forms['<?=$filterName?>'].submit()"
+					<?=($selectedVal == 'true')?'checked="true"':''?>
+					>
+					<label for="<?=$this->escapeHtml($name)?>"><?=$this->transEsc($filterName)?></label>
+				<?endif;?>
+				<?=$this->tab->asHiddenFields($name);?>
+				</form>
+			</div>
+		<? endif; ?>
+	<? endforeach;?>
+</div>
 <table class="table" summary="<?=$this->transEsc('Holdings details from')?> <?=$this->transEsc($holding['location'])?>">
     <!-- tabulka jednotek, zahlavi -->
     <tbody>

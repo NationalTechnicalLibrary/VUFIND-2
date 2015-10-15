@@ -22,3 +22,12 @@ span.available-status {
     width: 200px;
     z-index: 1000;
 }
+
+.holdings-filters{
+	height:40px;
+}
+.filter-select{
+	padding:0px;
+	height:28px;
+	padding-bottom:3px;
+}

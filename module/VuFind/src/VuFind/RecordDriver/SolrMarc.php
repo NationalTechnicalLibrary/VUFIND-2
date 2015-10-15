@@ -1054,15 +1054,34 @@ class SolrMarc extends SolrDefault
     }
 
     /**
+     * Support functions for holding filters
+     * Daniel Marecek, NTK
+     */
+
+    public function getHoldingFilters()
+    {
+	return $this->ils->getDriver()->getHoldingFilters($this->getUniqueID());
+    }
+
+    public function getAvailableHoldingFilters()
+    {
+	return array(
+		'year' => array('type' => 'select', 'keep' => array('hide_loans')),
+		'volume' => array('type' => 'select', 'keep' => array('hide_loans')),
+		'hide_loans' => array('type' => 'checkbox', 'keep' => array('year', 'volume')),
+	);
+    }
+
+    /**
      * Get an array of information about record holdings, obtained in real-time
      * from the ILS.
      *
      * @return array
      */
-    public function getRealTimeHoldings()
+    public function getRealTimeHoldings($filters = array())
     {
         return $this->hasILS()
-            ? $this->holdLogic->getHoldings($this->getUniqueID())
+            ? $this->holdLogic->getHoldings($this->getUniqueID(), $filters)
             : array();
     }
 

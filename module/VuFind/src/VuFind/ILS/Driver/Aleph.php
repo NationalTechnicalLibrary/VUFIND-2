@@ -74,41 +74,6 @@ class AlephTranslator
     }
 
     /**
-     * Parse a table
-     *
-     * @param string $file     Input file
-     * @param string $callback Callback routine for parsing
-     *
-     * @return string
-     */
-    // DM - zakomentovano, nepouziva se
-//    public function parsetable($file, $callback)
-//    {
-//        $result = array();
-//        $file_handle = fopen($file, "r, ccs=UTF-8");
-//        $rgxp = "";
-//        while (!feof($file_handle) ) {
-//            $line = fgets($file_handle);
-//            $line = chop($line);
-//            if (preg_match("/!!/", $line)) {
-//                $line = chop($line);
-//                $rgxp = AlephTranslator::regexp($line);
-//            } if (preg_match("/!.*/", $line) || $rgxp == "" || $line == "") {
-//            } else {
-//                $line = str_pad($line, 80);
-//                $matches = "";
-//                if (preg_match($rgxp, $line, $matches)) {
-//                    call_user_func_array(
-//                        $callback, array($matches, &$result, $this->charset)
-//                    );
-//                }
-//            }
-//        }
-//        fclose($file_handle);
-//        return $result;
-//    }
-
-    /**
      * Get a tab40 collection description
      *
      * @param string $collection Collection
@@ -131,120 +96,6 @@ class AlephTranslator
         return $desc;
     }
 
-    /**
-     * Support method for tab15Translate -- translate a sub-library name
-     *
-     * @param string $sl Text to translate
-     *
-     * @return string
-     */
-    // DM - zakomentovano, pouziva se fce ze souboru AlephTables.php podle NTK
-    /*
-    public function tabSubLibraryTranslate($sl)
-    {
-        return $this->table_sub_library[$sl];
-    }
-    */
-    /**
-     * Get a tab15 item status
-     *
-     * @param string $slc  Sub-library
-     * @param string $isc  Item status code
-     * @param string $ipsc Item process status code
-     *
-     * @return string
-     */
-    // DM - zakomentovano, pouziva se fce ze souboru AlephTables.php podle NTK
-    /*
-    public function tab15Translate($slc, $isc, $ipsc)
-    {
-        $tab15 = $this->tabSubLibraryTranslate($slc);
-        if ($tab15 == null) {
-            print "tab15 is null!<br>";
-        }
-        $findme = $tab15["tab15"] . "|" . $isc . "|" . $ipsc;
-        $result = $this->table15[$findme];
-        if ($result == null) {
-            $findme = $tab15["tab15"] . "||" . $ipsc;
-            $result = $this->table15[$findme];
-        }
-        $result["sub_lib_desc"] = $tab15["desc"];
-        return $result;
-    }
-    */
-    /**
-     * tab15 callback (modify $tab15 by reference)
-     *
-     * @param array  $matches preg_match() return array
-     * @param array  &$tab15  result array to generate
-     * @param string $charset character set
-     *
-     * @return void
-     */
-    /*
-     *      * DM - zakomentovano, nepouziva se
-    public static function tab15Callback($matches, &$tab15, $charset)
-    {
-        $lib = $matches[1];
-        $no1 = $matches[2];
-        if ($no1 == "##") {
-            $no1="";
-        }
-        $no2 = $matches[3];
-        if ($no2 == "##") {
-            $no2="";
-        }
-        $desc = iconv($charset, 'UTF-8', $matches[5]);
-        $key = trim($lib) . "|" . trim($no1) . "|" . trim($no2);
-        $tab15[trim($key)] = array(
-            "desc" => trim($desc), "loan" => $matches[6], "request" => $matches[8],
-            "opac" => $matches[10]
-        );
-    }
-     */
-
-    /**
-     * tab40 callback (modify $tab40 by reference)
-     *
-     * @param array  $matches preg_match() return array
-     * @param array  &$tab40  result array to generate
-     * @param string $charset character set
-     *
-     * @return void
-     */
-    /*
-     *      * DM - zakomentovano, nepouziva se
-    public static function tab40Callback($matches, &$tab40, $charset)
-    {
-        $code = trim($matches[1]);
-        $sub = trim($matches[2]);
-        $sub = trim(preg_replace("/#/", "", $sub));
-        $desc = trim(iconv($charset, 'UTF-8', $matches[4]));
-        $key = $code . "|" . $sub;
-        $tab40[trim($key)] = array( "desc" => $desc );
-    }
-    */
-    /**
-     * sub-library callback (modify $tab_sub_library by reference)
-     *
-     * @param array  $matches          preg_match() return array
-     * @param array  &$tab_sub_library result array to generate
-     * @param string $charset          character set
-     *
-     * @return void
-     */
-    /*
-            *      * DM - zakomentovano, nepouziva se
-            *
-    public static function tabSubLibraryCallback($matches, &$tab_sub_library,
-        $charset
-    ) {
-        $sublib = trim($matches[1]);
-        $desc = trim(iconv($charset, 'UTF-8', $matches[5]));
-        $tab = trim($matches[6]);
-        $tab_sub_library[$sublib] = array( "desc" => $desc, "tab15" => $tab );
-    }
-     */
     /**
      * Apply standard regular expression cleanup to a string.
      *
@@ -774,7 +625,7 @@ class Aleph extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
     }
 
     /**
-     * Get Holding
+     * Get Holding - updated by Daniel Marecek - NTK - holdings filters
      *
      * This is responsible for retrieving the holding information of a certain
      * record.
@@ -788,12 +639,22 @@ class Aleph extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
      * keys: id, availability (boolean), status, location, reserve, callnumber,
      * duedate, number, barcode.
      */
-    public function getHolding($id, array $patron = null)
+    public function getHolding($id, array $patron = null, $filters = array())
     {
         $holding = array();
         list($bib, $sys_no) = $this->parseId($id);
-        $resource = $bib . $sys_no;
-        $params = array('view' => 'full');
+	$resource = $bib . $sys_no;
+        $params = array();
+        if (!empty($filters)) {
+		foreach ($filters as $key => $value) {
+			if ($key == 'hide_loans' && $value='true') {
+				$params['loaned'] = 'NO';
+			} else {
+				$params[$key] = $value;
+			}
+                }
+	}
+	$params['view'] = 'full';
         if (!empty($patron['id'])) {
             $params['patron'] = $patron['id'];
         } else if (isset($this->defaultPatronId)) {
@@ -948,6 +809,41 @@ class Aleph extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
             );
         }
         return $holding;
+    }
+
+    /**
+     * Filter holdings
+     *
+     * Daniel Mareček
+     * NTK - 10/2015
+     *
+     * inspired by MZK
+     *
+     */
+
+    public function getHoldingFilters($bibId) {
+	list($bib, $sys_no) = $this->parseId($bibId);
+        $resource = $bib . $sys_no;
+        $years = array();
+	$volumes = array();
+	try {
+		$xml = $this->doRestDLFRequest(array('record', $resource, 'filters')); // Aleph API provides filters
+	} catch (Exception $ex) {
+		return array();
+	}
+	if (isset($xml->{'record-filters'})) {
+		if (isset($xml->{'record-filters'}->{'years'})) {
+			foreach ($xml->{'record-filters'}->{'years'}->{'year'} as $year) {
+				$years[] = $year;
+			}
+		}
+		if (isset($xml->{'record-filters'}->{'volumes'})) {
+			foreach ($xml->{'record-filters'}->{'volumes'}->{'volume'} as $volume) {
+				$volumes[] = $volume;
+			}
+		}
+	}
+	return array('year' => $years, 'volume' => $volumes, 'hide_loans' => array(true, false));
     }
 
     /**
@@ -1465,7 +1361,7 @@ class Aleph extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
         $status = $xml->xpath("//institution/z305-bor-status");
         $expiry = $xml->xpath("//institution/z305-expiry-date");
         $recordList['expire'] = $this->parseDate($expiry[0]);
-        $recordList['group'] = $status[0];
+        $recordList['group'] = $status[0];//print_r($status[0]);
         return $recordList;
     }
 
