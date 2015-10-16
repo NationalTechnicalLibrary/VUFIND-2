@@ -452,7 +452,7 @@ ids:
 
 TopicBrowse:
   QueryFields:
-    topic_browse:
+    topic_facet:
       - [onephrase, ~]
 
 AuthorBrowse:
