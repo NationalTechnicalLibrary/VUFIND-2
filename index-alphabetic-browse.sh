@@ -58,7 +58,7 @@ function build_browse
 }
 build_browse "hierarchy" "hierarchy_browse"
 build_browse "title" "title_fullStr" 1 "-Dbibleech=StoredFieldLeech -Dsortfield=title_sort -Dvaluefield=title_fullStr"
-build_browse "topic" "topic_browse"
+build_browse "topic" "topic_facet" # zmena z topic_browse na topic_facet, v puvodnim poli jsou zaindexovana i nezadouci podpole
 build_browse "author" "author_browse"
 build_browse "lcc" "callnumber-a" 1
 build_browse "dewey" "dewey-raw" 1 "-Dbibleech=StoredFieldLeech -Dsortfield=dewey-sort-browse -Dvaluefield=dewey-raw"
