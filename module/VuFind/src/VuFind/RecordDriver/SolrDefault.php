@@ -831,7 +831,8 @@ class SolrDefault extends AbstractBase
             $params = $this->getBookOpenURLParams();
             break;
         case 'Article':
-            $params = $this->getArticleOpenURLParams();
+		$params = $this->getArticleOpenURLParams();
+		return false; // don't generate url for articles
             break;
         case 'Journal':
             $params = $this->getJournalOpenURLParams();
