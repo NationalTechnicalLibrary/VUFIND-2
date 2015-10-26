@@ -16,7 +16,7 @@ if (empty($lcc)){
 	$pos2 = strpos($lcc, '.');
 	$lcc = substr($lcc,$pos1 + 3, empty($pos2) ? strlen($lcc)-$pos1-3 : $pos2-$pos1-3);
 	$url = 'http://www.techlib.cz/user-actions/get-location-image/lcc/';
-	$pic = $url.$lcc;
+	$pic = $url.$lcc.'?&location=ntk';
 	echo "  <img src=\"$pic\">";
 }
 ?>
