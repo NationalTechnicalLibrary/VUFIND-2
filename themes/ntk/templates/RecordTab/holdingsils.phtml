@@ -168,7 +168,10 @@
                             <?=$this->transEsc($row['duedate'])?>
                         <? endif; ?>
                 <a class="<?=$check ? 'checkRequest' : ''?> modal-link inlineblock placehold loc" href="<?=$this->recordLink()->getRequestUrl($row['link'])?>">&nbsp;<?=$this->transEsc($check ? "Check Recall" : "Recall This")?>&nbsp;</a>
-              <? endif; ?>
+						<? endif; ?>
+			  <? if (!empty($row['queue'][0])): ?>
+				 <span class="text-danger" style="margin-left:10px;font-weight:bold;" data-toggle="tooltip" title="<?=$this->transEsc('waiting_in_queue')?>"><?=$row['queue'][0]?></span>
+			  <? endif; ?>
             <? endif; ?>
           <? endif; ?>
           <? /* Embed item structured data: library, barcode, call number */ ?>

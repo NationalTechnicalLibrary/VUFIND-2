@@ -670,25 +670,21 @@ class Aleph extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
             //
             // DM - status jednotky + dilci knihovna
             //
-        if ($this->translator) {
-        //    $item_status = $this->translator->tab15Translate(
-        //        $sub_library_code, $item_status, $item_process_status
-        //    );
-            //
-            // DM - preklad ze souboru AlephTables.php funkci tab15_translate - upraveno podle NTK
-            $item_status = tab15_translate($sub_library_code, $item_status, $item_process_status);
+        	if ($this->translator) {
+            	// DM - preklad ze souboru AlephTables.php funkci tab15_translate - upraveno podle NTK
+            	$item_status = tab15_translate($sub_library_code, $item_status, $item_process_status);
             } else {
-            $item_status = array(
-                'opac'         => 'Y',
-                'request'      => 'C',
-                'desc'         => (string) $z30->{'z30-item-status'},
-                'sub_lib_desc' => (string) $z30->{'z30-sub-library'}
-            );
-        }
-        if ($item_status['opac'] != 'Y') {
-            continue;
-        }
-        $availability = false;
+            	$item_status = array(
+                	'opac'         => 'Y',
+                	'request'      => 'C',
+                	'desc'         => (string) $z30->{'z30-item-status'},
+                	'sub_lib_desc' => (string) $z30->{'z30-sub-library'}
+            	);
+        	}
+        	if ($item_status['opac'] != 'Y') {
+            	continue;
+        	}
+        	$availability = false;
             $reserve = ($item_status['request'] == 'C')?'N':'Y';
             //
             // DM - umisteni jednotky
@@ -732,18 +728,18 @@ class Aleph extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
 
             /*DM - zmena regu.vyrazu v prvnich dvouch vetvich - pro parsovani data pujeceno do*/
             /*DM - dalsi zmena - jeli On Shelf, tak neni treba zobrazovat - hodno by bylo zjistit vsechny mozny stavy z alephu*/
-           if (preg_match("/([0-9]*\/[0-9]*\/[0-9]*);([a-zA-Z ]*)/", $status, $matches)) {
-               $duedate = $this->parseDate($matches[1]);
-               $requested = (trim($matches[2]) == "Requested");
-           } else if (preg_match("/([0-9]*\/[0-9]*\/[0-9]*)/", $status, $matches)) {
-               $duedate = $this->parseDate($matches[1]);
-           } else if (preg_match("/^(\d+\/?){3}$/", $status, $matches)) {
-              $duedate = $this->parseDate($status);
-           } else if ($status == "On Shelf") {
-              $duedate = null;
-           } else {
-              $duedate = $status; /*DM - zmena z null na $status - ztracela se informace*/
-           }
+           	if (preg_match("/([0-9]*\/[0-9]*\/[0-9]*);([a-zA-Z ]*)/", $status, $matches)) {
+            	$duedate = $this->parseDate($matches[1]);
+               	$requested = (trim($matches[2]) == "Requested");
+           	} else if (preg_match("/([0-9]*\/[0-9]*\/[0-9]*)/", $status, $matches)) {
+            	$duedate = $this->parseDate($matches[1]);
+           	} else if (preg_match("/^(\d+\/?){3}$/", $status, $matches)) {
+              	$duedate = $this->parseDate($status);
+           	} else if ($status == "On Shelf") {
+              	$duedate = null;
+           	} else {
+              	$duedate = $status; /*DM - zmena z null na $status - ztracela se informace*/
+           	}
 
             // process duedate
             if ($availability) {
@@ -778,8 +774,8 @@ class Aleph extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
                }else{
                        $GLOBALS['eiz'] = 2;
                }
-            }
-
+			}
+			$queue = (string) $item->{'queue'};
             $holding[] = array(
                 'id'                => $id,
                 'item_id'           => $item_id,
@@ -801,8 +797,8 @@ class Aleph extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
                 'collection_desc'   => (string) $collection_desc['desc'], // umisteni jednoty cesky
                 'callnumber_second' => (string) $z30->{'z30-call-no-2'},
                 'sub_lib_desc'      => (string) $item_status['sub_lib_desc'], // dilci kihovna
-                'no_of_loans'       => (string) $z30->{'$no_of_loans'},
-                'requested'         => (string) $requested,
+				'requested'         => (string) $requested,
+				'queue'				=> (string) $queue,
                 'tooltip'           => (string) $item_status['tooltip'],
                 'tooltip-vscht'     => (string) $collection_desc['tooltip'],
                 'eiz'               => $GLOBALS['eiz'],
