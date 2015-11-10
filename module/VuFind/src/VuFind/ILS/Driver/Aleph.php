@@ -643,18 +643,18 @@ class Aleph extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
     {
         $holding = array();
         list($bib, $sys_no) = $this->parseId($id);
-	$resource = $bib . $sys_no;
+	    $resource = $bib . $sys_no;
         $params = array();
         if (!empty($filters)) {
-		foreach ($filters as $key => $value) {
-			if ($key == 'hide_loans' && $value='true') {
-				$params['loaned'] = 'NO';
-			} else {
-				$params[$key] = $value;
-			}
+            foreach ($filters as $key => $value) {
+                if ($key == 'hide_loans' && $value='true') {
+                    $params['loaned'] = 'NO';
+                } else {
+                    $params[$key] = $value;
                 }
-	}
-	$params['view'] = 'full';
+            }
+	    }
+	    $params['view'] = 'full';
         if (!empty($patron['id'])) {
             $params['patron'] = $patron['id'];
         } else if (isset($this->defaultPatronId)) {
