@@ -203,7 +203,9 @@
         <? elseif (empty($row['callnumber_second'])): ?>
 
         <? else: ?>
-            <? if (preg_match("/\\d/", $row['collection_desc']) > 0): ?>
+            <? if (preg_match("/koutek/", $row['collection_desc'])): ?>
+                <!-- don't show link, we don't have that image yet -->
+            <? elseif (preg_match("/\\d/", $row['collection_desc']) > 0): ?>
                 <?$LCC = explode(" ", $row['callnumber_second']);?>
                 <a class="help-link" href="/vufind/map.php?lcc=map<?=$LCC[0]?>">
             <? endif; ?>
