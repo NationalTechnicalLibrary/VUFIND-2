@@ -7,6 +7,10 @@ function tab40_translate($collection, $sublib) {
   array (
     'desc' => '2. NP, Centrální pult'
   ),
+  '201|' =>
+  array (
+    'desc' => '2. NP, Konzultační koutek'
+  ),
   '002|' => 
   array (
     'desc' => 'Sklad',
