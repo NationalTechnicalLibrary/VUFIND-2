@@ -43,6 +43,8 @@ public Set getCollections(Record record) {
                         break;
         case "ABD025" : result.add("VSCHT");
                         break;
+	case "ABB041" : result.add("UOCHB");
+			break;
         default:	     result.add("NTK");
       }
     }

@@ -382,24 +382,28 @@ class AjaxController extends AbstractBase
         elseif($collection_code == "Multiple Locations"){
             $location = $this->translate("Multiple Locations");
         }
-        else {
-            switch ($collection_code) {
-                case 002:
+		else {
+		
+			switch ($collection_code) {
+				case '001':
+						$location = $this->translate('Volný výběr, nezařazeno');
+						break;
+            	case '002':
                         $location = $this->translate("Stack room"); // sklad
                         break;
-                case 011:
-                    $location = $this->translate("Depository"); // depozitar
+                case '011':
+                    	$location = $this->translate("Depository"); // depozitar
                         break;
-                case 004:
+                case '004':
                         $location = $this->translate("Book news, 4th floor"); // novinky 4. NP
                         break;
-                case 01:
+                case '01':
                         $location = $this->translate("Reading room of historical fund"); // badatelna HF
                         break;
-                case 02:
+                case '02':
                         $location = $this->translate("Safe of historical fund"); // trezor HF
                         break;
-                case 03:
+                case '03':
                         $location = $this->translate("Stack room of historical fund"); // skald HF
                         break;
                 default:
