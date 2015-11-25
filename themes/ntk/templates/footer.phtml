@@ -41,11 +41,16 @@
       <i title="Piktogram NTK" class="ntk-pictogram pull-left"></i>
       <p class="pull-left">
         Technická 6/2710, 160 80 Praha 6 - Dejvická<br>
-        <a href="mailto:info@techlib.cz">info@techlib.cz</a>, tel.: 222 22 18 18
+        <a href="mailto:info@techlib.cz">info@techlib.cz</a>, tel.: 232 002 535
       </p>
       <p class="pull-right">
-        <a href="https://www.techlib.cz/cs/82763"><?=$this->transEsc('Privacy')?></a>
-        <a href="http://www.techlib.cz/cs/2690-pristupy-a-opravneni"><?=$this->transEsc('Access & Privileges')?></a>
+	<?if ($this->layout()->userLang === 'cs'):?>
+         <a href="https://www.techlib.cz/cs/82763"><?=$this->transEsc('Privacy')?></a>
+         <a href="http://www.techlib.cz/cs/2690-pristupy-a-opravneni"><?=$this->transEsc('Access & Privileges')?></a>
+        <? else: ?>
+         <a href="http://www.techlib.cz/en/82764-privacy"><?=$this->transEsc('Privacy')?></a>
+         <a href="http://www.techlib.cz/en/2812-access-privileges"><?=$this->transEsc('Access & Privileges')?></a>
+        <? endif; ?>
         Copyright &copy; 2006 - 2015
       </p>
     </div>
