@@ -383,7 +383,7 @@ class AjaxController extends AbstractBase
             $location = $this->translate("Multiple Locations");
         }
 		else {
-		
+	
 			switch ($collection_code) {
 				case '001':
 						$location = $this->translate('Volný výběr, nezařazeno');
@@ -391,8 +391,12 @@ class AjaxController extends AbstractBase
             	case '002':
                         $location = $this->translate("Stack room"); // sklad
                         break;
-                case '011':
-                    	$location = $this->translate("Depository"); // depozitar
+				case '011':
+						if ($info['sub_lib_desc'] == "Fond UOCHB"){
+							$location = $this->translate("UOCHB department"); // 
+						}else{
+							$location = $this->translate("Depository"); // depozitar
+						}
                         break;
                 case '004':
                         $location = $this->translate("Book news, 4th floor"); // novinky 4. NP
