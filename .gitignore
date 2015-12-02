@@ -17,7 +17,7 @@ TAGS
 # Runtime data and caches
 /solr/alphabetical_browse/
 /solr/**/spell*
-/solr/**/index
+/solr/**/index*
 /solr/**/tlog
 /local/cache/
 /local/harvest/*/
