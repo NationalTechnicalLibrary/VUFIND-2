@@ -258,19 +258,16 @@ var Lightbox = {
    */
   get: function(controller, action, get, post, callback) {
     // Build URL
-    // DM - '/vufind/map.php?lcc=mapQ325'; - mapa regalu
-    var prmtr = $.param(get);
-
-    if (prmtr.search("map") > 0){
-      var url = '/vufind/map.php?lcc='+prmtr;
-    }else {
-      var url = path + '/AJAX/JSON?method=getLightbox&submodule=' + controller + '&subaction=' + action;
-      if (typeof get !== "undefined" && get !== {}) {
-        url += '&' + $.param(get);
-      }
-      if (typeof post == "undefined") {
-        post = {};
-      }
+    if(controller == 'map'){
+	    var url = '/vufind/map.php?lcc=map'+get;
+	}else{
+        var url = path + '/AJAX/JSON?method=getLightbox&submodule=' + controller + '&subaction=' + action;
+        if (typeof get !== "undefined" && get !== {}) {
+            url += '&' + $.param(get);
+        }
+        if (typeof post == "undefined") {
+            post = {};
+        }
     }
     return this.getByUrl(url, post, callback);
   },
@@ -421,37 +418,6 @@ $(document).ready(function() {
       title = $(this).html();
     }
     $('#modal .modal-title').html(title);
-    Lightbox.titleSet = true;
-  });
-  /**
-   * Pro mapu regálu připojí vysvětlivky umístění do title.
-   */
-  $('.map-link').click(function() {
-    var title = $(this).attr('title');
-    if(typeof title === "undefined") {
-      title = $(this).html();
-    }
-
-    var p,s,r,vysledek,title_desc;
-    if (title.search('Shelf') > 0){
-	p = 'floor';
-	s = 'section';
-	r = 'shelf';
-    }else{
-	p = 'patro';
-	s = 'sekce';
-	r = 'regál';
-    }
-
-    var patro = title.charAt(48);
-    title_desc = p+': '+patro;
-    var sekce = title.charAt(49);
-    title_desc += ', '+s+': '+sekce;
-    var regal = title.substr(50,3);
-    title_desc += ', '+r+': '+regal;
-
-    vysledek = title+' ('+title_desc+')';
-    $('#modal .modal-title').html(vysledek);
     Lightbox.titleSet = true;
   });
 });

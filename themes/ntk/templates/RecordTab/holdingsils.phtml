@@ -199,7 +199,11 @@
         <td>    <!-- Location -->
 
         <? if ($row['sub_lib_desc'] == 'VŠCHT ústavy'): ?>
-            <a href="http://www.chemtk.cz/cs/82950-seznam-ustavnich-knihoven">
+            <?if ($this->layout()->userLang === 'cs'):?>
+                <a href="https://www.chemtk.cz/cs/82950-seznam-ustavnich-knihoven">
+            <? else: ?>
+                <a href="https://www.chemtk.cz/en/82974-departmental-libraries">
+            <? endif; ?>
         <? elseif (empty($row['callnumber_second'])): ?>
 
         <? else: ?>

@@ -353,7 +353,7 @@ class AjaxController extends AbstractBase
                 $use_unknown_status = true;
             }
             // Store call number/location info:
-            $callNumbers[] = $info['callnumber'];
+            $callNumbers[] = $info['callnumber_second'];
             $locations[] = $info['location'];
         }
 
@@ -373,8 +373,11 @@ class AjaxController extends AbstractBase
         }
         elseif($collection_code == 200){
             /* Destnik, Kindle */
-            $location = $this->translate("Central Desk, 2th floor");
-        }
+            $location = $this->translate("Central Desk, 2nd floor");
+		}
+		elseif($collection_code == 201){
+			$location = $this->translate("Knowledge Navigation Corner, 2nd floor");
+		}
         elseif(($collection_code > 100 && $collection_code < 1000) || ($collection_code == "UCT departments")){
             /* Pripad pro VSCHT ustavy, Aleph posila v location cisla v rozmezi 100 az 1000. */
             $location = $this->translate("UCT departments");
@@ -382,38 +385,35 @@ class AjaxController extends AbstractBase
         elseif($collection_code == "Multiple Locations"){
             $location = $this->translate("Multiple Locations");
         }
-		else {
-	
-			switch ($collection_code) {
-				case '001':
-						$location = $this->translate('Volný výběr, nezařazeno');
-						break;
-            	case '002':
-                        $location = $this->translate("Stack room"); // sklad
-                        break;
-				case '011':
-						if ($info['sub_lib_desc'] == "Fond UOCHB"){
-							$location = $this->translate("UOCHB department"); // 
-						}else{
-							$location = $this->translate("Depository"); // depozitar
-						}
-                        break;
-                case '004':
-                        $location = $this->translate("Book news, 4th floor"); // novinky 4. NP
-                        break;
-                case '01':
-                        $location = $this->translate("Reading room of historical fund"); // badatelna HF
-                        break;
-                case '02':
-                        $location = $this->translate("Safe of historical fund"); // trezor HF
-                        break;
-                case '03':
-                        $location = $this->translate("Stack room of historical fund"); // skald HF
-                        break;
-                default:
-                        $location = $this->translate("Unknown");
+        elseif($collection_code === '01'){
+            $location = $this->translate("Reading room of historical fund"); // badatelna HF
+        }
+        elseif($collection_code === '001'){
+            $location = $this->translate('Volný výběr, nezařazeno');
+        }
+        elseif($collection_code === '011'){
+            if($info['sub_lib_desc'] === "Fond UOCHB"){
+                $location = $this->translate("UOCHB department"); //
+            }else{
+                $location = $this->translate("Depository"); // depozitar
             }
         }
+        elseif($collection_code === '02'){
+            $location = $this->translate("Safe of historical fund"); // trezor HF
+        }
+        elseif($collection_code === '002'){
+            $location = $this->translate("Stack room"); // sklad
+        }
+        elseif($collection_code === '03'){
+            $location = $this->translate("Stack room of historical fund"); // skald HF
+        }
+        elseif($collection_code === '004'){
+            $location = $this->translate("Book news, 4th floor"); // novinky 4. NP
+        }
+        else{
+	        $location = $this->translate("Unknown");
+        }
+
         $availability_message = $use_unknown_status
             ? $messages['unknown']
             : $messages[$available ? 'available' : 'unavailable'];

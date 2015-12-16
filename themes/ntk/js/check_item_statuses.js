@@ -66,7 +66,67 @@ function checkItemStatuses() {
               ? result.reserve_message
               : result.location
             );
+            
+            // links
+            if (result.location == "V&Scaron;CHT &uacute;stavy"){
+                item.find('.location').empty().append("<a href='https://www.chemtk.cz/cs/82950-seznam-ustavnich-knihoven'>"+result.location+"</a>");
+            } else if (result.location == "UCT departments"){
+                 item.find('.location').empty().append("<a href='https://www.chemtk.cz/en/82974-departmental-libraries'>"+result.location+"</a>");           
+            } else if (
+                    (result.location == "Unknown") || (result.location == "Nezn&aacute;mo") ||
+                    (result.location == "Sklad historick&eacute;ho fondu") || (result.location == "Stack room of historical collection") ||
+                    (result.location == "Trezor historick&eacute;ho fondu") || (result.location == "Reading room of historical collection") ||
+                    (result.location == "Badatelna historick&eacute;ho fondu") || (result.location == "Safe of historical collection") ||
+                    (result.location == "Depozit&aacute;\u0159") || (result.location == "Depository") ||
+                    (result.location == "Konzulta\u010dn&iacute; koutek, 2. NP") || (result.location == "Knowledge Navigation Corner, 2nd floor") ||
+                    (result.location == "V&iacute;ce um&iacute;st\u011bn&iacute;") || (result.location == "Multiple Locations") ||
+                    (result.location == "Sklad") || (result.location == "Stack room") ||
+                    (result.location == "Voln&yacute; v&yacute;b\u011br, neza\u0159azeno") || (result.location == "Open stacks, uncategorized") ||
+                    (result.location == "&Uacute;OCHB &uacute;stav") || (result.location == "IOCB department") ||
+                    (result.location == "Book news, 4th floor") || (result.location == "Novinky, 4. NP")
+                    ){
+	            item.find('.location').empty().append(result.location);
+            } else {
+                item.find('.location').empty().append("<a href=''>"+result.location+"</a>");
+                item.find('.location').click(function() {
+
+                    var title = result.location; 
+                    if(typeof title === "undefined") {
+                        title = $(this).html();
+                    }
+
+                    var p,s,r,vysledek,title_desc;
+                    if (title.indexOf('Shelf') >= 0){
+                        p = 'floor';
+                        s = 'section';
+                        r = 'shelf';
+                        var patro = title.charAt(6);
+                        title_desc = p+': '+patro;
+                        var sekce = title.charAt(7);
+                        title_desc += ', '+s+': '+sekce;
+                        var regal = title.substr(8,3);
+                        title_desc += ', '+r+': '+regal;
+                    }else{
+                        p = 'patro';
+                        s = 'sekce';
+                        r = 'regál';
+                        var patro = title.charAt(13);
+                        title_desc = p+': '+patro;
+                        var sekce = title.charAt(14);
+                        title_desc += ', '+s+': '+sekce;
+                        var regal = title.substr(15,3);
+                        title_desc += ', '+r+': '+regal;
+                    }
+
+                    vysledek = title+' ('+title_desc+')';
+                    $('#modal .modal-title').html(vysledek);
+                    Lightbox.titleSet = true;
+
+			        return Lightbox.get('map','lcc',result.callnumber);
+		        });
+            }
           }
+
         });
       } else {
         // display the error message on each of the ajax status place holder

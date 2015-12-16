@@ -95,16 +95,9 @@
         <? if ($this->driver->supportsAjaxStatus()): ?>
           <strong><?=$this->transEsc('Located')?>:</strong>
 
-        <? $CallNom = $this->driver->getCallNumber(); ?>
-        <? if (!empty($CallNom)): ?>
-            <a class="help-link map-link" href="/vufind/map.php?lcc=map<?=$CallNom?>">
-        <? endif; ?>
           <span class="location ajax-availability hidden">
             <?=$this->transEsc('Loading')?>...
           </span>
-        <? if (!empty($CallNom)): ?>
-            </a>
-        <? endif; ?>
 
           <div class="locationDetails"></div>
         <? else: ?>
