@@ -12,7 +12,7 @@
         ikdyz je pickup-location jen jedno umisteni, ulozeno jako pole -->
 <? if (!is_array($this->pickup)){
 
-    echo ($this->pickup);
+    echo ($this->transEsc($this->pickup));
 
 }else{ ?>
     <p class="lead" xmlns="http://www.w3.org/1999/html">
