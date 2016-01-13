@@ -55,7 +55,7 @@
                     <? endif; ?>
 <!--PRIHLASENI-->
                     <? if (is_object($account) && $account->loginEnabled()): // hide login/logout if unavailable ?>
-                        <a id="logoutOptions" <? if(!$account->isLoggedIn()): ?> class="hidden"<? endif ?>" href="<?=$this->url('myresearch-home', array(), array('query' => array('redirect' => 0)))?>" class="btn tab-up" title="<?=$this->transEsc("Your Account")?>"><i class="glyphicon glyphicon-user"></i> <?=$this->transEsc("Your Account")?></a>
+                        <a id="logoutOptions" <? if(!$account->isLoggedIn()): ?> class="hidden"<? endif ?>" href="<?=$this->url('myresearch-home', array(), array('query' => array('redirect' => 0)))?>" class="btn tab-up" title="<?=$this->transEsc("Your Account")?>"><i class="glyphicon glyphicon-user"></i> <? print_r($_SERVER["givenName"] .' '. $_SERVER["sn"]); ?></a>
                         <a id="logoutOptions" <? if(!$account->isLoggedIn()): ?> class="hidden"<? endif ?>" href="<?=$this->url('myresearch-logout')?>" class="btn tab-up" title="<?=$this->transEsc("Log Out")?>"><i class="glyphicon glyphicon-log-out"></i> <?=$this->transEsc("Log Out")?></a>
                         <? if ($sessionInitiator = $account->getSessionInitiator($this->serverUrl($this->url('myresearch-home')))): ?>
                             <a <? if($account->isLoggedIn()): ?> class="hidden"<? endif ?> id="loginOptions" class="btn tab-up" href="<?=$this->escapeHtmlAttr($sessionInitiator)?>" ><i class="glyphicon glyphicon-log-in"></i> <?=$this->transEsc("Institutional Login")?></a>
