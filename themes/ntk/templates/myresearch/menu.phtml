@@ -1,4 +1,4 @@
-<h3><?=$this->transEsc('Your Account')?></h3>
+<h3><? print_r($_SERVER["givenName"] .' '. $_SERVER["sn"]); ?></h3>
 <ul class="list-group">
   <? if ($this->userlist()->getMode() !== 'disabled'): ?>
     <a href="<?=$this->url('myresearch-favorites')?>" class="list-group-item<?=$this->active == 'favorites' ? ' active' : ''?>">
