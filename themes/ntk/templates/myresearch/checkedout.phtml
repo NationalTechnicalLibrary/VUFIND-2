@@ -94,6 +94,9 @@ $this->layout()->breadcrumbs = '<li><a href="' . $this->url('myresearch-home') .
 
                         <? if (is_numeric($ilsDetails['no_requested'])): ?>
                             <strong><?=$this->transEsc('wait_cue')?>:</strong> <?=$this->escapeHtml($ilsDetails['no_requested'])?>
+                            <? if ($ilsDetails['no_requested'] > 0): ?>
+                                <?=$this->transEsc('(Item is reserved by another user.)')?>
+                            <? endif; ?>
                             <br />
                         <? elseif (empty($ilsDetails['no_requested'])): ?>
                             <strong><?=$this->transEsc('wait_cue')?>:</strong> 0
