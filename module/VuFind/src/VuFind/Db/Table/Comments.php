@@ -70,7 +70,7 @@ class Comments extends Gateway
                 array('firstname', 'lastname')
             );
             $select->where->equalTo('comments.resource_id',  $resource->id);
-            $select->order('comments.created');
+            $select->order('comments.created DESC');
         };
 
         return $this->select($callback);
