@@ -211,7 +211,7 @@
                 <!-- don't show link, we don't have that image yet -->
             <? elseif (preg_match("/\\d/", $row['collection_desc']) > 0): ?>
                 <?$LCC = explode(" ", $row['callnumber_second']);?>
-                <a class="help-link" href="/vufind/map.php?lcc=map<?=$LCC[0]?>">
+                <a class="map-link" href="lcc=<?=$LCC[0]?>" title="<?if ($this->layout()->userLang === 'cs'):?><?=$this->escapeHtml($row['collection_desc'])?><? else: ?><?=$this->escapeHtml($row['collection'])?><? endif; ?>">
             <? endif; ?>
         <? endif; ?>
 

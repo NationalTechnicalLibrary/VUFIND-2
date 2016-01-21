@@ -407,6 +407,14 @@ $(document).ready(function() {
     var split = this.href.split('=');
     return Lightbox.get('Help','Home',{topic:split[1]});
   });
+  // Map links
+  $('.map-link').click(function() {
+    var split = this.href.split('lcc=');
+    vysledek = this.title;
+    $('#modal .modal-title').html(vysledek);
+    Lightbox.titleSet = true;
+    return Lightbox.get('map','Home',split[1]);
+  });
   // Hierarchy links
   $('.hierarchyTreeLink a').click(function() {
     var id = $(this).parent().parent().parent().find(".hiddenId")[0].value;
