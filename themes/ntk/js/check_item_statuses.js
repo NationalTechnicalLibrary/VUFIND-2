@@ -66,12 +66,17 @@ function checkItemStatuses() {
               ? result.reserve_message
               : result.location
             );
-            
+
             // links
             if (result.location == "V&Scaron;CHT &uacute;stavy"){
                 item.find('.location').empty().append("<a href='https://www.chemtk.cz/cs/82950-seznam-ustavnich-knihoven'>"+result.location+"</a>");
             } else if (result.location == "UCT departments"){
-                 item.find('.location').empty().append("<a href='https://www.chemtk.cz/en/82974-departmental-libraries'>"+result.location+"</a>");           
+                 item.find('.location').empty().append("<a href='https://www.chemtk.cz/en/82974-departmental-libraries'>"+result.location+"</a>");
+            } else if (result.location.indexOf("3D") > 0){ // studovna casopisu
+                item.find('.location').empty().append("<a href=''>"+result.location+"</a>");
+                item.find('.location').click(function() {
+                    return Lightbox.getByUrl('../periodicals.php');
+                });
             } else if (
                     (result.location == "Unknown") || (result.location == "Nezn&aacute;mo") ||
                     (result.location == "Sklad historick&eacute;ho fondu") || (result.location == "Stack room of historical collection") ||
