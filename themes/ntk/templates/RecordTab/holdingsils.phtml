@@ -205,13 +205,19 @@
                 <a href="https://www.chemtk.cz/en/82974-departmental-libraries">
             <? endif; ?>
         <? elseif (empty($row['callnumber_second'])): ?>
-
+<!--        studovna casopisu-->
+            <?if (preg_match("/3D/", $row['collection_desc']) > 0): ?>
+                <a class="map-link" href="lcc=periodicals">
+            <? endif; ?>
         <? else: ?>
             <? if (preg_match("/koutek/", $row['collection_desc'])): ?>
                 <!-- don't show link, we don't have that image yet -->
             <? elseif (preg_match("/\\d/", $row['collection_desc']) > 0): ?>
                 <?$LCC = explode(" ", $row['callnumber_second']);?>
                 <a class="map-link" href="lcc=<?=$LCC[0]?>" title="<?if ($this->layout()->userLang === 'cs'):?><?=$this->escapeHtml($row['collection_desc'])?><? else: ?><?=$this->escapeHtml($row['collection'])?><? endif; ?>">
+<!--        studovna casopisu-->
+            <? elseif (preg_match("/3D/", $row['collection_desc']) > 0): ?>
+                <a class="map-link" href="lcc=periodicals">
             <? endif; ?>
         <? endif; ?>
 

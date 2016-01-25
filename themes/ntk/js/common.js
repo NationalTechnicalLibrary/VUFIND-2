@@ -409,10 +409,16 @@ $(document).ready(function() {
   });
   // Map links
   $('.map-link').click(function() {
+
     var split = this.href.split('lcc=');
-    vysledek = this.title;
-    $('#modal .modal-title').html(vysledek);
-    Lightbox.titleSet = true;
+    // studovna casopisu
+    if (split[1] == 'periodicals'){
+      return Lightbox.getByUrl('../periodicals.php');
+    } else { // mapa regalu
+      vysledek = this.title;
+      $('#modal .modal-title').html(vysledek);
+      Lightbox.titleSet = true;
+    }
     return Lightbox.get('map','Home',split[1]);
   });
   // Hierarchy links
