@@ -9465,6 +9465,18 @@ function tab40_translate($collection, $sublib) {
 		'5C416|' =>
 		array (
 		'desc' => '5.NP, regál 5C/416',
+        ),
+        '5C417|' =>
+		array (
+		'desc' => '5.NP, regál 5C/417',
+        ),
+        '5C418|' =>
+		array (
+		'desc' => '5.NP, regál 5C/418',
+		),
+        '5C419|' =>
+		array (
+		'desc' => '5.NP, regál 5C/41999999999',
 		),
 		// DM - pridana nova sekce 5D
 		'5D001|'=>
