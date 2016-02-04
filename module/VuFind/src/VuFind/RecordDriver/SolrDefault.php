@@ -1209,6 +1209,17 @@ class SolrDefault extends AbstractBase
     }
 
     /**
+     * Get Collection
+     *
+     * @return string
+     */
+    public function getCollection()
+    {
+        return isset($this->fields['collection'][0]) ?
+            $this->fields['collection'][0] : '';
+    }
+
+    /**
      * Get the full title of the record.
      *
      * @return string

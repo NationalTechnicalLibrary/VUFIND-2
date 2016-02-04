@@ -194,7 +194,27 @@
         <th><?=$this->transEsc('Online Access')?>: </th>
         <td>
           <? foreach ($urls as $current): ?>
-            <a href="<?=$this->escapeHtmlAttr($this->proxyUrl($current['url']))?>"><?=$this->escapeHtml($current['desc'])?></a><br/>
+            <?
+            $collection = $this->driver->getCollection();
+            $current["url"] == $current["desc"] ? $description ="Get full text" : $description = $current["desc"];
+            switch($collection){
+              case 'NTK':
+                echo '<a href="'.$this->escapeHtmlAttr($this->proxyUrl($current["url"])).'">'.$this->transEsc($description).'</a><br/>';
+                break;
+              case 'VSCHT':
+                echo '<a href="https://ezproxy.vscht.cz/login?qurl='.$current["url"].'">'.$this->transEsc($description).'</a><br/>';
+                break;
+              case 'UOCHB':
+                $uochb_url = preg_split("/^(http(s?):\/\/)?(www.\.)+[a-zA-Z0-9\.\-\_]+(\.[a-zA-Z]{2,3})/", $current['url']);
+                $lenght = strlen($current['url']) - strlen($uochb_url[1]);
+                $uoch_prefix = substr($current['url'], 0, $lenght);
+                $string_url = $uoch_prefix . '.ursula.uochb.cas.cz:2048' . $uochb_url[1];
+                echo '<a href="'.$string_url.'">'.$this->transEsc($description).'</a><br/>';
+                break;
+              default:
+                echo '<a href="'.$current["url"].'">'.$this->transEsc($description).'</a><br/>';
+            }
+            ?>
           <? endforeach; ?>
           <? if ($openUrl): ?>
             <?=$this->openUrl($openUrl)?><br/>

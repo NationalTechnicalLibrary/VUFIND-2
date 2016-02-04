@@ -128,8 +128,28 @@
         <? endif; ?>
         <? if (!is_array($urls)) $urls = array();
           if(!$this->driver->isCollection()):
-            foreach ($urls as $current): ?>
-              <a href="<?=$this->escapeHtmlAttr($this->proxyUrl($current['url']))?>" class="fulltext" target="new"><i class="fa fa-external-link"></i> <?=($current['url'] == $current['desc']) ? $this->transEsc('Get full text') : $this->escapeHtml($current['desc'])?></a><br/>
+          foreach ($urls as $current): ?>
+            <?
+                $collection = $this->driver->getCollection();
+                $current["url"] == $current["desc"] ? $description ="Get full text" : $description = $current["desc"];
+                switch($collection){
+                    case 'NTK':
+                        echo '<a href="'.$this->escapeHtmlAttr($this->proxyUrl($current["url"])).'" class="fulltext" target="new"><i class="fa fa-external-link"></i> '.$this->transEsc($description).'</a><br/>';
+                        break;
+                    case 'VSCHT':
+                        echo '<a href="https://ezproxy.vscht.cz/login?qurl='.$current["url"].'" class="fulltext" target="new"><i class="fa fa-external-link"></i> '.$this->transEsc($description).'</a><br/>';
+                        break;
+                    case 'UOCHB':
+                        $uochb_url = preg_split("/^(http(s?):\/\/)?(www.\.)+[a-zA-Z0-9\.\-\_]+(\.[a-zA-Z]{2,3})/", $current['url']);
+                        $lenght = strlen($current['url']) - strlen($uochb_url[1]);
+                        $uoch_prefix = substr($current['url'], 0, $lenght);
+                        $string_url = $uoch_prefix . '.ursula.uochb.cas.cz:2048' . $uochb_url[1];
+                        echo '<a href="'.$string_url.'" class="fulltext" target="new"><i class="fa fa-external-link"></i> '.$this->transEsc($description).'</a><br/>';
+                        break;
+                    default:
+                        echo '<a href="'.$current["url"].'" class="fulltext" target="new"><i class="fa fa-external-link"></i> '.$this->transEsc($description).'</a><br/>';
+                }
+            ?>
           <? endforeach; ?>
         <? endif; ?>
       <? endif; ?>
