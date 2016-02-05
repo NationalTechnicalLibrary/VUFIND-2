@@ -178,15 +178,11 @@ class AuthorityRecommend implements RecommendInterface
         // core, i.e. it only returns results where $lookfor IS found in in the
         // "Heading" search and IS NOT found in the "MainHeading" search defined
         // in authsearchspecs.yaml.
+        // DM - simply request for psh-authority-search
         $request = new Parameters(
             array(
-                'join' => 'AND',
-                'bool0' => array('AND'),
-                'lookfor0' => array($this->lookfor),
-                'type0' => array('Heading'),
-                'bool1' => array('NOT'),
-                'lookfor1' => array($this->lookfor),
-                'type1' => array('MainHeading')
+                'lookfor' => array($this->lookfor),
+                'type' => array('Heading')
             )
         );
 
@@ -210,7 +206,10 @@ class AuthorityRecommend implements RecommendInterface
             // Extract relevant details:
             $recordArray = array(
                 'id' => $result->getUniqueID(),
-                'heading' => $result->getBreadcrumb()
+                'heading' => $result->getBreadcrumb(),
+                'narrower' => $result->getNarrower(),
+                'broader' => $result->getBroader(),
+                'see_also' => $result->getSeeAlso()
             );
 
             // check for duplicates before adding record to recordSet

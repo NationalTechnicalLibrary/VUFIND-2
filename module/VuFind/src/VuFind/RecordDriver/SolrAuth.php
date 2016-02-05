@@ -79,6 +79,30 @@ class SolrAuth extends SolrMarc
     }
 
     /**
+     * Get the narrower references for the record.
+     *
+     * @return array
+     */
+    public function getNarrower()
+    {
+        return isset($this->fields['narrower'])
+        && is_array($this->fields['narrower'])
+            ? $this->fields['narrower'] : array();
+    }
+
+    /**
+     * Get the broader references for the record.
+     *
+     * @return array
+     */
+    public function getBroader()
+    {
+        return isset($this->fields['broader'])
+        && is_array($this->fields['broader'])
+            ? $this->fields['broader'] : array();
+    }
+
+    /**
      * Get the use for references for the record.
      *
      * @return array
