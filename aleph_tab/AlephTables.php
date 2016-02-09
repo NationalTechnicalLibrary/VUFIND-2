@@ -14768,7 +14768,15 @@ function tab15_translate($slc, $isc, $ipsc) {
 		'opac' => 'Y',
 		'tooltip' => 'Exemplář je trvale zapůjčen pracovníkovi některého z ústavů VŠCHT (viz “Umístění”) a nelze jej vypůjčit běžným způsobem. V případě zájmu kontaktujte pracovníka meziknihovních služeb VŠCHT telefonicky 232 002 571 nebo mailem mvs@vscht.cz.',
 		),
-		'15A|81|' => 
+	  	'15A|24|UOCHB' =>
+		array (
+	  	'desc' => 'Trvale vypůjčeno',
+	  	'loan' => 'N',
+	  	'request' => 'N',
+	  	'opac' => 'Y',
+	  	'tooltip' => 'Exemplář je trvale zapůjčen pracovníkovi ústavu UOCHB a nelze jej vypůjčit běžným způsobem. V případě zájmu kontaktujte pracovníka meziknihovních služeb UOCHB mailem lenka.haskovcova@techlib.cz nebo telefonicky 232 002 580.',
+		),
+		'15A|81|' =>
 		array (
 		'desc' => 'Prezenčně - starý tisk',
 		'loan' => 'Y',
@@ -14925,7 +14933,10 @@ function tab15_translate($slc, $isc, $ipsc) {
 	$findme = $tab15['tab15'] . "|" . "|" . $ipsc;
 
 	if (!array_key_exists($findme, $table15)) {
-		$findme = $tab15['tab15'] . "|" . $isc . "|"; 
+		$findme = $tab15['tab15'] . "|" . $isc . "|";
+		if ($slc == 'UOCHB'){
+			$findme .= $slc;
+		}
 		$result = $table15[$findme];
 	} else {
 		$result = $table15[$findme];
