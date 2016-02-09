@@ -421,6 +421,14 @@ $(document).ready(function() {
     }
     return Lightbox.get('map','Home',split[1]);
   });
+  // Thumbnail links
+  $('.thumbnail-link').click(function() {
+    var params = this.title;
+    $('.modal-dialog').width(230);
+    $('#modal .modal-title').html('book-cover');
+    Lightbox.titleSet = true;
+    return Lightbox.getByUrl('../img-box.php?uid='+params);
+  });
   // Hierarchy links
   $('.hierarchyTreeLink a').click(function() {
     var id = $(this).parent().parent().parent().find(".hiddenId")[0].value;
