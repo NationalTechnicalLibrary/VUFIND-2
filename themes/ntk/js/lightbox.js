@@ -210,6 +210,12 @@ var Lightbox = {
    * Default callback is changeContent
    */
   getByUrl: function(url, post, callback) {
+    // set width of lightbox window - for book-cover image in record, it's smaller
+    if(url.indexOf("img-box.php") >= 0){
+      $('.modal-dialog').width(230);
+    }else{
+      $('.modal-dialog').width(580);
+    }
     if(typeof callback == "undefined") {
       // No custom handler: display return in lightbox
       callback = this.changeContent;

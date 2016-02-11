@@ -424,7 +424,6 @@ $(document).ready(function() {
   // Thumbnail links
   $('.thumbnail-link').click(function() {
     var params = this.title;
-    $('.modal-dialog').width(230);
     $('#modal .modal-title').html('book-cover');
     Lightbox.titleSet = true;
     return Lightbox.getByUrl('../img-box.php?uid='+params);
