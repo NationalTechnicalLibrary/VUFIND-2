@@ -979,8 +979,7 @@ class SolrDefault extends AbstractBase
     {
         $places = $this->getPlacesOfPublication();
         $names = $this->getPublishers();
-        $dates = $this->getHumanReadablePublicationDates();
-
+        $dates = $this->getPublicationDates();
         $i = 0;
         $retval = array();
         while (isset($places[$i]) || isset($names[$i]) || isset($dates[$i])) {
