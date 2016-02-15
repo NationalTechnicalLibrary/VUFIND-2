@@ -10,8 +10,8 @@ $(document).ready(function() {
       <? endforeach; ?>
     <? endforeach; ?>
   <? else: ?>
-    var group = addGroup();
-    addSearch(group);
+    var group = addGroup(null, 'Title', null);
+    addSearch(group, null, 'Author');
     addSearch(group);
   <? endif; ?>
 });
