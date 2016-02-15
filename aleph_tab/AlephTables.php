@@ -14728,7 +14728,7 @@ function tab15_translate($slc, $isc, $ipsc) {
 		'opac' => 'Y',
 		'tooltip' => 'Exemplář se nachází ve volném výběru a je možné si ho půjčit na 28 dní domů.',
 		),
-		'15A|11|' => 
+		'15A|11|' =>
 		array (
 		'desc' => 'Sklad, nepůjčuje se',
 		'loan' => 'Y',
@@ -14934,7 +14934,7 @@ function tab15_translate($slc, $isc, $ipsc) {
 
 	if (!array_key_exists($findme, $table15)) {
 		$findme = $tab15['tab15'] . "|" . $isc . "|";
-		if ($slc == 'UOCHB'){
+		if ($slc == 'UOCHB' && $isc == '24'){
 			$findme .= $slc;
 		}
 		$result = $table15[$findme];
