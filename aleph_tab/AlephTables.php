@@ -14680,7 +14680,7 @@ function tab15_translate($slc, $isc, $ipsc) {
 		'desc' => 'Vyřazeno',
 		'loan' => 'N',
 		'request' => 'N',
-		'opac' => 'Y',
+		'opac' => 'N',
 		),
 		'15A||NA' => 
 		array (
