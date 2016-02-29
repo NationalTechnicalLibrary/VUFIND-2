@@ -137,7 +137,11 @@
                         echo '<a href="'.$this->escapeHtmlAttr($this->proxyUrl($current["url"])).'" class="fulltext" target="new"><i class="fa fa-external-link"></i> '.$this->transEsc($description).'</a><br/>';
                         break;
                     case 'VSCHT':
-                        echo '<a href="https://ezproxy.vscht.cz/login?qurl='.$current["url"].'" class="fulltext" target="new"><i class="fa fa-external-link"></i> '.$this->transEsc($description).'</a><br/>';
+                        if (preg_match('/vydavatelstvi.vscht/',$current["url"])) {
+                            echo '<a href="' . $current["url"] . '">' . $this->transEsc($description) . '</a><br/>';
+                        }else {
+                            echo '<a href="https://ezproxy.vscht.cz/login?qurl=' . $current["url"] . '" class="fulltext" target="new"><i class="fa fa-external-link"></i> ' . $this->transEsc($description) . '</a><br/>';
+                        }
                         break;
                     case 'UOCHB':
                         $uochb_url = preg_split("/^(http(s?):\/\/)?(www.\.)+[a-zA-Z0-9\.\-\_]+(\.[a-zA-Z]{2,3})/", $current['url']);
